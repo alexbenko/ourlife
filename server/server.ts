@@ -24,7 +24,17 @@ app.use(express.urlencoded({
 }))
 
 app.use(cors())
-app.use(helmet())
+// this modifies the security policy so it can load files from external domains
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        'img-src': ["'self'", 's3.amazonaws.com', 'i.imgur.com']
+      }
+    }
+  })
+)
 
 const environment = process.env.ENVIRONMENT
 if (!environment) {
