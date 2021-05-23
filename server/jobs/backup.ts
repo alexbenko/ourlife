@@ -85,7 +85,6 @@ const backupDb = async () => {
 
     await dumpDB()
     const dbBackupFilePath = path.join(__dirname, '../../db_backup.bak')
-    console.log(dbBackupFilePath)
     const fileBuffer = await fsAsync.readFile(dbBackupFilePath)
 
     const params : s3Params = {
