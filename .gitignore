@@ -107,3 +107,5 @@ bundle.js
 bundle.js.map
 *.sql
 *.bak
+/photos
+*.jpg
