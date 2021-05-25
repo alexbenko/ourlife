@@ -11,17 +11,16 @@ const pool = new Pool({
 
 export default async (query = '', values = []) => {
   try {
-    // eslint-disable-next-line no-throw-literal
-    if (query.length === 0) throw ('No Query String Passed In')
+    if (query.length === 0) throw Error('No Query String Passed In')
+
     log.info(`[Query] ${query}`)
     const { rows } = await pool.query(query, values) // if you dont understand this, see: https://node-postgres.com/features/pooling
     return rows
   } catch (err) {
     if (err.toString().includes('duplicate')) {
-      // eslint-disable-next-line no-throw-literal
-      throw 'duplicate'
+      throw new Error('duplicate in unique column')
     }
-    log.error(`Error Querying DB, reason: ${err}`)
+
     throw err
   }
 }
