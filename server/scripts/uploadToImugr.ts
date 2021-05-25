@@ -5,6 +5,7 @@ import path from 'path'
 import { promisify } from 'util'
 
 require('dotenv').config()
+// TODO: move the promisifed fs to its own module since i use it in a few other files
 const fsAsync = {
   readdir: promisify(fs.readdir),
   readFile: promisify(fs.readFile)
