@@ -10,9 +10,12 @@ import path from 'path'
 import log from './logging/log'
 import redisHelpers from './redis/redisHelpers'
 import backup from './jobs/backup'
+import db from './postgresql/db'
+
+// routers
+import albumrouter from './router/albumRouter'
 
 const rfs = require('rotating-file-stream')
-
 require('dotenv').config()
 
 const app = express()
@@ -78,8 +81,20 @@ app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Re
 })
 
 app.use('/', express.static(path.join(__dirname, '../client/dist')))
-app.listen(port, () => {
+
+app.use('/api/albums', redisHelpers.isBanned, albumrouter)
+app.listen(port, async () => {
   console.log(`app listening at http://localhost:${port} in ${environment} mode.`)
+  try {
+    const test = await db('SELECT * FROM albums;')
+    console.log(test)
+    if (environment === 'production' && test.length === 0) {
+      throw new Error('Album table is not set up yet.')
+    }
+  } catch (err) {
+    log.error(`Failed to connect to db: ${err.message}`)
+    process.exit(1)
+  }
 })
 
 process.on('uncaughtException', err => {
