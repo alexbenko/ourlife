@@ -9,7 +9,8 @@
     "start": "npm run tsc && node dist/server.js",
     "tsc": "tsc",
     "build:dev": "webpack --watch --mode development",
-    "build": "webpack"
+    "build": "webpack",
+    "schema":"psql -U photo -d photobooth -f schema.sql"
   },
   "repository": {
     "type": "git",
