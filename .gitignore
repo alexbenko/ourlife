@@ -108,3 +108,4 @@ bundle.js.map
 *.bak
 /photos
 *.jpg
+db.sh
