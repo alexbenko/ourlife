@@ -9,7 +9,7 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000
 })
 
-exports.query = async (query = '', values = []) => {
+export default async (query = '', values = []) => {
   try {
     // eslint-disable-next-line no-throw-literal
     if (query.length === 0) throw ('No Query String Passed In')
