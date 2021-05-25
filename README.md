@@ -42,27 +42,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-I personally love Nodejs. It is a powerful language with a lot of amazing features, online support, and a myriad of packages via NPM to speed up development time. But there are diffculties scaling due to Javscript being dynamically typed.  I am super passionate about backend development and I feel a Nodejs and Typescript backend is super powerful. I am creating this tempalate to benefit my future projects, show my backend skills to potential employers, and help anyone who wants to use this to speed up their development. This template has a variety of features and implementations.
-
-This project is no where near what I want it to be able to do
-## To Do List:
-* <strike> Custom logging that saves logs to their own files when in production envioronment to replace console.log(). </strike>
-* <strike> Cronjob that uploads the logs to a cloud storage (Possibly Google Drive or AWS S3) and then clears out the log directory to prevent filling up server. </strike>
-* <strike> Ip Blacklister - saves the ips of malicious attackers in Redis and a request validator that 404s that ip when they try to make another request. </strike>
-* React Front End Set Up - Webpack, babel, robots.txt
-* Honeypot endpoints - save the ip of any request to these endpoints and ban them
-* Log Critical Errors to a slack channel
-* Full Test Suite
-* CI with Github actions/docker
-* Full User Authentication
-* Automatic HTTPS set up
-* <strike> Bash script that backs up postgresql and cron job that uploads the backup to S3 </strike>
-* Bash script that backs up redis and cron job that uploads the backup to S3
-* Bash script that ensures proper packages for server are installed
-
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
 
 ### Built With
 
@@ -89,7 +69,7 @@ To get a local copy up and running follow these simple example steps.
     ```sh
     gh repo clone alexbenko/FullStack-Typescript-Template
     ```
-    
+
 This is an example of how to list things you need to use the software and how to install them.
 * npm
   ```sh
@@ -107,7 +87,7 @@ This is an example of how to list things you need to use the software and how to
   PG_USER=
   PG_PASSWORD=
 ```
-3. 
+3.
 4. Install NPM packages
    ```sh
    npm install
