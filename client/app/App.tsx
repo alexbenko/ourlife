@@ -3,7 +3,7 @@ import React from 'react'
 const App = () => {
   return (
     <div>
-      Hello World motha fucka
+      <img style={{height: '20%', width: '20%'}} src='https://i.imgur.com/xjoSjpI.jpeg'/>
     </div>
   )
 }
