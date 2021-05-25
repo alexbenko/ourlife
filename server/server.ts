@@ -87,10 +87,10 @@ app.listen(port, async () => {
   console.log(`app listening at http://localhost:${port} in ${environment} mode.`)
   try {
     const test = await db('SELECT * FROM albums;')
-    console.log(test)
     if (environment === 'production' && test.length === 0) {
       throw new Error('Album table is not set up yet.')
     }
+    console.log('Connected to database successfully!')
   } catch (err) {
     log.error(`Failed to connect to db: ${err.message}`)
     process.exit(1)
