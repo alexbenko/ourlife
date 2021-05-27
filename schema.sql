@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS albums;
+DROP TABLE IF EXISTS albums CASCADE;
 DROP TABLE IF EXISTS images;
 
 CREATE TABLE albums(
@@ -6,7 +6,7 @@ CREATE TABLE albums(
   album_name VARCHAR(255) NOT NULL,
   album_desc VARCHAR(560) DEFAULT NULL,
   created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
 );
 
 CREATE TABLE images(
@@ -17,9 +17,8 @@ CREATE TABLE images(
   img_url VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT now(),
   updated_at TIMESTAMP DEFAULT now(),
-  CONSTRAINT fk_album
-    FOREIGN KEY(album_id)
-      REFERENCES albums(id)
+  FOREIGN KEY(album_id)
+    REFERENCES albums(id)
       ON DELETE SET NULL
 );
 
@@ -28,5 +27,5 @@ CREATE TABLE users(
   fname VARCHAR(60) NOT NULL,
   lname VARCHAR(60) NOT NUll,
   email VARCHAR(100) UNIQUE NOT NULL,
-  pass VARCHAR(255) NOT NULL,
+  pass VARCHAR(255) NOT NULL
 );
