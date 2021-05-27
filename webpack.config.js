@@ -31,6 +31,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [],
-  devtool: 'cheap-module-source-map'
+  plugins: []
 }
