@@ -11,7 +11,7 @@ const pool = new Pool({
 
 export default async (query = '', values = []) => {
   try {
-    if (query.length === 0) throw Error('No Query String Passed In')
+    if (query.length === 0) throw new Error('No Query String Passed In')
 
     log.info(`[Query] ${query}`)
     const { rows } = await pool.query(query, values) // if you dont understand this, see: https://node-postgres.com/features/pooling
@@ -21,6 +21,6 @@ export default async (query = '', values = []) => {
       throw new Error('duplicate in unique column')
     }
 
-    throw err
+    throw new Error(err)
   }
 }
