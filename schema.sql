@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS albums CASCADE;
 DROP TABLE IF EXISTS images;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE albums(
   id SERIAL primary key,
