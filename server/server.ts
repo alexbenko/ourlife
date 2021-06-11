@@ -28,16 +28,7 @@ app.use(express.urlencoded({
 
 app.use(cors())
 // this modifies the security policy so it can load files from external domains
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        'img-src': ["'self'", 's3.amazonaws.com', 'i.imgur.com']
-      }
-    }
-  })
-)
+
 
 const environment = process.env.ENVIRONMENT
 if (!environment) {
@@ -83,7 +74,7 @@ app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Re
 app.use('/', express.static(path.join(__dirname, '../client/dist')))
 
 app.use('/api/albums', redisHelpers.isBanned, albumrouter)
-app.listen(port, async () => {
+app.listen(port, '0.0.0.0', async () => {
   console.log(`app listening at http://localhost:${port} in ${environment} mode.`)
   try {
     const test = await db('SELECT * FROM albums;')
