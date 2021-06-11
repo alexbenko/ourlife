@@ -110,3 +110,4 @@ bundle.js.LICENSE.txt
 /photos
 *.jpg
 db.sh
+client/dist/photos
