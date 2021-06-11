@@ -1,9 +1,22 @@
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import './styles/app.css'
 const App = () => {
+  const [albumData, setAlbumData] = useState(null)
+  const getAlbumData = async () => {
+    // eslint-disable-next-line no-undef
+    const response = await fetch('/api/albums/all')
+    const data = await response.json()
+    setAlbumData(data)
+  }
+  useEffect(() => {
+    getAlbumData()
+  }, [])
+
+  useEffect(() => console.log(albumData), [albumData])
+
   return (
-    <div>
-      <img style={{height: '20%', width: '20%'}} src='https://i.imgur.com/xjoSjpI.jpeg'/>
+    <div style={{ backgroundColor: 'black' }}>
+
     </div>
   )
 }
