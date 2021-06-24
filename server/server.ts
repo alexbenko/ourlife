@@ -14,6 +14,7 @@ import db from './postgresql/db'
 
 // routers
 import albumrouter from './router/albumRouter'
+import imagesRouter from './router/imagesRouter'
 
 const rfs = require('rotating-file-stream')
 require('dotenv').config()
@@ -27,8 +28,7 @@ app.use(express.urlencoded({
 }))
 
 app.use(cors())
-// this modifies the security policy so it can load files from external domains
-
+app.use(helmet())
 
 const environment = process.env.ENVIRONMENT
 if (!environment) {
@@ -71,9 +71,10 @@ app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Re
   res.status(418).send(';)')
 })
 
-app.use('/', express.static(path.join(__dirname, '../client/dist')))
+app.use('/', express.static(path.join(__dirname, './static')))
 
 app.use('/api/albums', redisHelpers.isBanned, albumrouter)
+app.use('/api/images', redisHelpers.isBanned, imagesRouter)
 app.listen(port, '0.0.0.0', async () => {
   console.log(`app listening at http://localhost:${port} in ${environment} mode.`)
   try {
