@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start:dev": "nodemon",
-    "dev": "ts-node server/server.ts",
+    "dev": "nodemon",
+    "d": "ts-node server/server.ts",
     "start": "npm run tsc && node dist/server.js",
     "tsc": "tsc",
     "schema": "psql -U photo -d photobooth -f schema.sql"
