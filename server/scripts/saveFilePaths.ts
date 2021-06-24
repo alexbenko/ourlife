@@ -12,7 +12,7 @@ const fsAsync = {
 
 const saveFilePaths = async () => {
   try {
-    const photoFolderPath = path.join(__dirname, '../../photos')
+    const photoFolderPath = path.join(__dirname, '../static/photos')
     const albums = await fsAsync.readdir(photoFolderPath)
 
     // eslint-disable-next-line array-callback-return
