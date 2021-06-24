@@ -1,5 +1,4 @@
 import db from '../postgresql/db'
-import { ImgurClient } from 'imgur'
 import fs from 'fs'
 import path from 'path'
 import { promisify } from 'util'
@@ -17,11 +16,11 @@ const saveFilePaths = async () => {
     const albums = await fsAsync.readdir(photoFolderPath)
 
     // eslint-disable-next-line array-callback-return
-    await Promise.all(albums.map(async (album) => {
-      if (album.includes('.')) return false
+    const result = await Promise.all(albums.map(async (album) => {
+      if (album.includes('.')) return false // these are directories and should not include any files
 
-      await db('INSERT INTO ALBUMS(album_name) VALUES($1)', [album])
-      const albumId = await db('SELECT id FROM albums WHERE album_name = $1', [album])
+      await db('INSERT INTO ALBUMS(album_name) VALUES($1);', [album])
+      const albumId = await db('SELECT id FROM albums WHERE album_name = $1;', [album])
       const { id } = albumId[0]
 
       const fullAlbumPath = `${photoFolderPath}/${album}`
@@ -29,9 +28,13 @@ const saveFilePaths = async () => {
       const imagePaths = imagesInAlbum.filter(img => img !== '.DS_Store').map(img => fullAlbumPath + '/' + img)
 
       for (const imageUrl of imagePaths) {
-        await db('INSERT INTO IMAGES(album_id, img_url) VALUES($1,$2)', [id, imageUrl.split('/photos')[1]])
+        await db('INSERT INTO IMAGES(album_id, img_url) VALUES($1,$2);', [id, imageUrl.split('/photos')[1]])
       }
+      return true
     }))
+    console.log(result)
+    console.log('Successfully Saved All Image File Paths')
+    process.exit(1)
   } catch (err) {
     console.log(err.message)
     process.exit(1)
