@@ -5,7 +5,6 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon",
-    "d": "ts-node server/server.ts",
     "start": "npm run tsc && node dist/server.js",
     "tsc": "tsc",
     "schema": "psql -U photo -d photobooth -f schema.sql"
