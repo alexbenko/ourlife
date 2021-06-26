@@ -21,7 +21,7 @@ interface s3Params{
 /**
  * Used to backup the log files to S3 for the app. Will only work properly for the logs directory.
  */
-const backupLogs = async () : Promise<boolean> => {
+const backupLogs = async function () {
   try {
     const logFolderPath = path.join(__dirname, '../logs')
 
@@ -71,7 +71,7 @@ const backupLogs = async () : Promise<boolean> => {
   }
 }
 
-const backupDb = async () => {
+const backupDb = async function () {
   try {
     log.info('Backing up database to S3')
 
