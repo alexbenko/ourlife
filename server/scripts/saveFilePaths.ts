@@ -9,6 +9,23 @@ const fsAsync = {
   readdir: promisify(fs.readdir),
   readFile: promisify(fs.readFile)
 }
+const capitalizeWord = (word) =>{
+  const text = word.split('')
+  text[0] = text[0].toUpperCase()
+  return text.join('')
+}
+const formatAlbumName = (text:string) => {
+  let formatted : string
+  if (text.includes('_')) {
+    // ie crater_lake => Crater Lake
+    formatted = text.split('_').join(' ').split(' ').map((s) => capitalizeWord(s)).join(' ')
+  } else {
+    // acadia => Acadia
+    formatted = capitalizeWord(text)
+  }
+
+  return formatted
+}
 
 const saveFilePaths = async () => {
   try {
@@ -19,8 +36,9 @@ const saveFilePaths = async () => {
     const result = await Promise.all(albums.map(async (album) => {
       if (album.includes('.')) return false // these are directories and should not include any files
 
-      await db('INSERT INTO ALBUMS(album_name) VALUES($1);', [album])
-      const albumId = await db('SELECT id FROM albums WHERE album_name = $1;', [album])
+      const albumName = formatAlbumName(album)
+      await db('INSERT INTO ALBUMS(album_name) VALUES($1);', [albumName])
+      const albumId = await db('SELECT id FROM albums WHERE album_name = $1;', [albumName])
       const { id } = albumId[0]
 
       const fullAlbumPath = `${photoFolderPath}/${album}`
