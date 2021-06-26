@@ -25,7 +25,7 @@ const generateTimeStamp = () => moment().tz('America/Los_Angeles').format('hh:mm
 */
 const error = (err : any) => {
   if (environment !== 'production') {
-    console.log(err)
+    console.log('\x1b[31m', err)
   } else {
     // TODO: eventually add boolean flag that will message a designated error slack channel
     const date = generateDatestamp()
@@ -44,7 +44,7 @@ const error = (err : any) => {
 */
 const info = (info : any) => {
   if (environment !== 'production') {
-    console.log(info)
+    console.log('\x1b[36m%s\x1b[0m', info)
   } else {
     const date = generateDatestamp()
     const time = generateTimeStamp()
