@@ -71,7 +71,7 @@ app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Re
   res.status(418).send(';)')
 })
 
-app.use('/', express.static(path.join(__dirname, './static')))
+app.use(express.static(path.join(__dirname, '/static')))
 
 app.use('/api/albums', redisHelpers.isBanned, albumrouter)
 app.use('/api/images', redisHelpers.isBanned, imagesRouter)
