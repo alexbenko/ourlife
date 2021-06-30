@@ -10,7 +10,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">FullStack-Typescript-Template</h3>
+  <h3 align="center">Ourlife</h3>
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
