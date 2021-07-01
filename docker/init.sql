@@ -1,0 +1,3 @@
+CREATE USER photo;
+CREATE DATABASE photobooth;
+GRANT ALL PRIVILEGES ON DATABASE photobooth TO photo;
