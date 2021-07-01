@@ -23,7 +23,7 @@ const generateTimeStamp = () => moment().tz('America/Los_Angeles').format('hh:mm
    * Used To log any errors to aid in debugging and have a permanent record of them.
    * @param err - the error thrown , ie in the catch block OR in a if(conditionNotMet) {}
 */
-const error = (err : any) => {
+const error = function (err : any) {
   if (environment !== 'production') {
     console.log('\x1b[31m', err)
   } else {
@@ -42,7 +42,7 @@ const error = (err : any) => {
    * Used To log any general info about the application. Useful for statistics, keeping track of how many times your endpoint.
    * @param info - the error thrown , ie in the catch block OR in a if(conditionNotMet) {}
 */
-const info = (info : any) => {
+const info = function (info : any) {
   if (environment !== 'production') {
     console.log('\x1b[36m%s\x1b[0m', info)
   } else {
