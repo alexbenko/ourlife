@@ -1,0 +1,29 @@
+version: "3"
+services:
+  postgres:
+    image: alexbenko/ourlife_db
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis
+    container_name: store
+    ports:
+      - '6379:6379'
+    logging:
+      driver: none
+
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/app.Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      REDIS_URL: redis://store
+      NODE_ENV: dev
+      PORT: 8080
+    ports:
+      - "8080:8080"
+    command: npm run start
+
