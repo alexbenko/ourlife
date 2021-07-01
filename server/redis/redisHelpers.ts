@@ -4,7 +4,7 @@ import { promisify } from 'util'
 import log from '../logging/log'
 
 const ipHashKey = 'bannedIp'
-const client = redis.createClient()
+const client = redis.createClient(process.env?.REDIS_URL)
 const hmgetAsync = promisify(client.hmget).bind(client) // wrap hmget in a promise
 
 client.on('connect', function () {
