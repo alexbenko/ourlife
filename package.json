@@ -5,9 +5,10 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon",
-    "start": "npm run tsc && node dist/server.js",
-    "tsc": "tsc",
-    "schema": "psql -U photo -d photobooth -f schema.sql"
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "schema": "psql -U photo -d photobooth -f schema.sql",
+    "compose:build":"npm run build && docker-compose up --build"
   },
   "repository": {
     "type": "git",
