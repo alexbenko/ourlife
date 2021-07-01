@@ -13,9 +13,7 @@ services:
       driver: none
 
   app:
-    build:
-      context: .
-      dockerfile: ./docker/app.Dockerfile
+    image: alexbenko/ourlife_server
     depends_on:
       - postgres
       - redis
