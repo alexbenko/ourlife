@@ -107,3 +107,6 @@ typings/
 server/static/photos
 *.jpg
 db.sh
+var
+/static
+/dist
