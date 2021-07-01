@@ -11,6 +11,7 @@ import log from './logging/log'
 import redisHelpers from './redis/redisHelpers'
 import backup from './jobs/backup'
 import db from './postgresql/db'
+import seed from './postgresql/seed'
 
 // routers
 import albumrouter from './router/albumRouter'
@@ -76,13 +77,16 @@ app.use(express.static(path.join(__dirname, '/static')))
 app.use('/api/albums', redisHelpers.isBanned, albumrouter)
 app.use('/api/images', redisHelpers.isBanned, imagesRouter)
 app.listen(port, '0.0.0.0', async () => {
-  console.log(`app listening at http://localhost:${port} in ${environment} mode.`)
   try {
     const test = await db('SELECT * FROM albums;')
-    if (environment === 'production' && test.length === 0) {
-      throw new Error('Album table is not set up yet.')
+    if (test.length === 0) {
+      console.log('DB is not set up, seeding...')
+      // TODO: add some sort of boolean flag once app is deployed so instead of running this script, it will pull pgdump file from S3
+      // and then import it
+      seed()
     }
     console.log('Connected to database successfully!')
+    console.log(`app listening at http://localhost:${port} in ${environment} mode.`)
   } catch (err) {
     log.error(`Error connecting to Postgres: \n ${err.message}`)
     process.exit(1)
