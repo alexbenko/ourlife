@@ -75,9 +75,10 @@ const backupDb = async function () {
   try {
     log.info('Backing up database to S3')
 
-    // this is in a function to ensure the database is dumped before upload and then deleted
+    // this is in a async function to ensure the database is dumped before upload
     const dumpDB = async () => {
-      exec('sh server/scripts/backup_pg.sh', (error, stdout) => {
+      const backupScriptPath = path.join(__dirname, '../../scripts/backup_pg.sh')
+      exec(`sh ${backupScriptPath}`, (error, stdout) => {
         if (error !== null) throw error
         if (stdout.includes('.env')) throw stdout
       })
