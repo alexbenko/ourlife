@@ -84,7 +84,7 @@ app.listen(port, '0.0.0.0', async () => {
     }
     console.log('Connected to database successfully!')
   } catch (err) {
-    log.error(`Failed to connect to db: ${err.message}`)
+    log.error(`Error connecting to Postgres: \n ${err.message}`)
     process.exit(1)
   }
 })
