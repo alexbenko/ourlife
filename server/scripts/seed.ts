@@ -9,7 +9,7 @@ const fsAsync = {
   readdir: promisify(fs.readdir),
   readFile: promisify(fs.readFile)
 }
-const capitalizeWord = (word) =>{
+const capitalizeWord = (word) => {
   const text = word.split('')
   text[0] = text[0].toUpperCase()
   return text.join('')
