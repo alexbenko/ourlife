@@ -6,3 +6,4 @@ nodemon.json
 README
 tsconfig.json
 /node_modules
+/docker
