@@ -13,15 +13,17 @@ services:
       driver: none
 
   app:
-    image: alexbenko/ourlife_server
+    image: alexbenko/ourlife_server:latest
     depends_on:
       - postgres
       - redis
+    volumes:
+    # obviously this is only for my local machine, path is slightly different on producton server
+      - /Users/AlexB/Desktop/static:/dist/static
     environment:
       REDIS_URL: redis://store
-      NODE_ENV: dev
       PORT: 8080
     ports:
       - "8080:8080"
-    command: npm run start
+    command: npm start
 
