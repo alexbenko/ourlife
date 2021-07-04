@@ -110,3 +110,6 @@ db.sh
 var
 /static
 /dist
+*.key
+*.crt
+/postgres-data
