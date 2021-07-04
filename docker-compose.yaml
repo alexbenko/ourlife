@@ -1,9 +1,17 @@
 version: "3"
 services:
   postgres:
-    image: alexbenko/ourlife_db
+    image: alexbenko/ourlife_db:latest
+    #command: -c chown postgres /var/lib/postgresql/ourlife.key
+    #command: -c chmod 640 /var/lib/postgresql/ourlife.key
+    command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/ourlife.crt -c ssl_key_file=/var/lib/postgresql/ourlife.key
     ports:
       - "5432:5432"
+    #volumes:
+       #- ./postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: photo
+
   redis:
     image: redis
     container_name: store
@@ -20,10 +28,18 @@ services:
     volumes:
     # obviously this is only for my local machine, path is slightly different on producton server
       - /Users/AlexB/Desktop/static:/dist/static
+      - /Users/AlexB/Desktop/logs:/dist/logs
     environment:
       REDIS_URL: redis://store
       PORT: 8080
     ports:
       - "8080:8080"
     command: npm start
+
+  nginx:
+    image: alexbenko/ourlife_nginx:latest
+    depends_on:
+      - app
+    ports:
+      - "80:80"
 
