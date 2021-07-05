@@ -2,15 +2,10 @@ version: "3"
 services:
   postgres:
     image: alexbenko/ourlife_db:latest
-    #command: -c chown postgres /var/lib/postgresql/ourlife.key
-    #command: -c chmod 640 /var/lib/postgresql/ourlife.key
-    command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/ourlife.crt -c ssl_key_file=/var/lib/postgresql/ourlife.key
     ports:
       - "5432:5432"
-    #volumes:
-       #- ./postgres-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: photo
+    volumes:
+       - ./postgres-data:/var/lib/postgresql/data
 
   redis:
     image: redis
@@ -27,19 +22,40 @@ services:
       - redis
     volumes:
     # obviously this is only for my local machine, path is slightly different on producton server
-      - /Users/AlexB/Desktop/static:/dist/static
-      - /Users/AlexB/Desktop/logs:/dist/logs
+      - /home/ec2-user/static:/dist/static
+      - /home/ec2-user/logs:/dist/logs
     environment:
       REDIS_URL: redis://store
       PORT: 8080
     ports:
       - "8080:8080"
     command: npm start
+    restart: unless-stopped
 
   nginx:
-    image: alexbenko/ourlife_nginx:latest
+    image: nginx:1.15-alpine
     depends_on:
       - app
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    restart: unless-stopped
+    # every 6 hours reload nginx config file and ssl certs
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    depends_on:
+      - nginx
+    # every 12 hours, per recomendation of lets encrypt, check if certs are valid and renew if not
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
