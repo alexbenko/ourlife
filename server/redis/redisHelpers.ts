@@ -1,21 +1,10 @@
-import redis, { RedisError } from 'redis'
 import { Request, Response, NextFunction } from 'express'
-import { promisify } from 'util'
 import log from '../logging/log'
+import client from './redisClient'
 
 const ipHashKey = 'bannedIp'
-const client = redis.createClient(process.env?.REDIS_URL)
-const hmgetAsync = promisify(client.hmget).bind(client) // wrap hmget in a promise
 
-client.on('connect', function () {
-  console.log('Successfully connected to redis!')
-})
-
-client.on('error', function (error : RedisError) {
-  log.error(`Redis Error: ${error}`)
-})
-
-function banIp (ip : string): void {
+function banIp (ip : string) {
   client.hmset(ipHashKey, { [ip]: 0 }, (err) => {
     if (err) {
       log.error(err)
@@ -23,7 +12,6 @@ function banIp (ip : string): void {
       log.info(`Banned Ip : ${ip}`)
     }
   })
-  client.quit()
 }
 
 /**
@@ -32,7 +20,7 @@ function banIp (ip : string): void {
  */
 async function isBanned (ip : string, req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const data: string[] = await hmgetAsync(ipHashKey, ip)
+    const data: string[] = await client.hmgetAsync(ipHashKey, ip)
     if (data[0]) {
       log.info(`Attempt from banned ip adress : ${ip}`)
       let parsedValue = Number(data[0])
@@ -46,7 +34,6 @@ async function isBanned (ip : string, req: Request, res: Response, next: NextFun
     } else {
       next()
     }
-    client.quit()
   } catch (err) {
     log.error(`Error Checking Ip: ${err}`)
     res.status(404)
