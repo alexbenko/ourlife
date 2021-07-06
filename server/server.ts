@@ -15,13 +15,12 @@ import seed from './postgresql/seed'
 
 // routers
 import albumrouter from './router/albumRouter'
-import imagesRouter from './router/imagesRouter'
 
 const rfs = require('rotating-file-stream')
 require('dotenv').config()
 
 const app = express()
-const port = 8080
+const port = process.env.ENVIRONMENT === 'production' ? Number(process.env.PORT) : 8080
 
 app.use(express.json())
 app.use(express.urlencoded({
@@ -75,8 +74,7 @@ app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Re
 app.use(express.static(path.join(__dirname, '/static'), { dotfiles: 'allow' }))
 
 app.use('/api/albums', redisHelpers.isBanned, albumrouter)
-app.use('/api/images', redisHelpers.isBanned, imagesRouter)
-app.listen(port, '0.0.0.0', async () => {
+app.listen(port, async () => {
   try {
     const test = await db('SELECT * FROM albums;')
     if (test.length === 0) {
