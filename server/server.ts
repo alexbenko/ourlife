@@ -72,7 +72,7 @@ app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Re
   res.status(418).send(';)')
 })
 
-app.use(express.static(path.join(__dirname, '/static')))
+app.use(express.static(path.join(__dirname, '/static'), { dotfiles: 'allow' }))
 
 app.use('/api/albums', redisHelpers.isBanned, albumrouter)
 app.use('/api/images', redisHelpers.isBanned, imagesRouter)
@@ -88,12 +88,14 @@ app.listen(port, '0.0.0.0', async () => {
     console.log('Connected to database successfully!')
     console.log(`app listening at http://localhost:${port} in ${environment} mode.`)
   } catch (err) {
+    console.log(err)
     log.error(`Error connecting to Postgres: \n ${err.message}`)
     process.exit(1)
   }
 })
 
 process.on('uncaughtException', err => {
+  console.log(err)
   log.error(`Uncaught Error: ${err}`)
   process.exit(1) // manadatory (as per the Node.js docs)
 })
