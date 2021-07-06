@@ -18,8 +18,6 @@
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <ul>
-      </ul>
     </li>
     <li>
     <li><a href="#license">License</a></li>
