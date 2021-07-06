@@ -1,8 +1,9 @@
 /server
+/static
 .eslintignore
 .eslintrc.json
 .gitignore
 nodemon.json
 README
 tsconfig.json
-/node_modules
+node_modules
