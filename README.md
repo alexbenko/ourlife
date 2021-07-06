@@ -35,13 +35,6 @@
   </ol>
 </details>
 
-
-
-<!-- ABOUT THE PROJECT -->
-## About The Project
-
-
-
 ### Built With
 
 * [Nodejs](https://nodejs.org)
@@ -51,46 +44,12 @@
 * [Postgres](https://www.postgresql.org/docs/13/index.html)
 * [Docker](https://docs.docker.com/)
 
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
 
-<!-- GETTING STARTED -->
-## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
 
-### Prerequisites
-1. Clone The Repository
-   ```sh
-   git clone https://github.com/alexbenko/Backend-Typescript-Template.git
-   ```
-    or using Github Cli
-    ```sh
-    gh repo clone alexbenko/FullStack-Typescript-Template
-    ```
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. You need to set up the following enviornment variables in order for the server to start. The names are self explanitory for what they are used for.
-```sh
-  ENVIRONMENT=
-  AWS_ACCESS_KEY=
-  AWS_SECRET_ACCESS_KEY=
-  S3_BUCKET_NAME=projecttiny
-  PG_USER=
-  PG_PASSWORD=
-```
-3.
-4. Install NPM packages
-   ```sh
-   npm install
-   ```
 
 <!-- LICENSE -->
 ## License
