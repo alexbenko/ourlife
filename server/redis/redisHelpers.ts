@@ -18,7 +18,7 @@ function banIp (ip : string) {
  * Middleware that checks the ip of every request and compares it to the banned ip dataset. If the ip is in the dataset,
  * It 404s. Only meant to be used as a midddleware function
  */
-async function isBanned (ip : string, req: Request, res: Response, next: NextFunction): Promise<void> {
+async function isBanned (ip : string, res: Response, next: NextFunction): Promise<void> {
   try {
     const data: string[] = await client.hmgetAsync(ipHashKey, ip)
     if (data[0]) {
