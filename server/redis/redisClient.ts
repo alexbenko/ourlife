@@ -1,8 +1,8 @@
 import redis from 'redis'
 import { promisify } from 'util'
 
-const connection = process.env.ENVIRONMENT === 'production' ? process.env.REDIS_URL : null
-const client = redis.createClient(connection)
+// this environemnt variable is only set in the docker compose file
+const client = redis.createClient(process.env?.REDIS_URL)
 
 client.on('connect', function () {
   console.log('Successfully connected to redis!')
