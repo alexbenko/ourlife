@@ -12,18 +12,6 @@
 
   <h3 align="center">Ourlife</h3>
 
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
-  </ol>
-</details>
-
 ### Built With
 
 * [Nodejs](https://nodejs.org)
@@ -32,18 +20,32 @@
 * [Redis](https://github.com/NodeRedis/node-redis)
 * [Postgres](https://www.postgresql.org/docs/13/index.html)
 * [Docker](https://docs.docker.com/)
+* [Nginx](http://nginx.org/en/docs/)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 This is the backend microservice for my photo/video sharing platform, Ourlife. 
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/alexbenko/ourlife-fe">Click me to see the repository for the front end code.</a> 
 </br>
+PLEASE keep in mind this project is still in the early stages.
+
+My partner and I go on a lot of trips and do a lot of fun things. We like taking pictures of everything we do, and as a result both of our phones are almost out of storage. I wanted to create a website where we could upload our photos to, so we no longer had to store them on our phone and have a way for our family and friends to see what we are up to. 
+
+Backend/DevOps is the software field I want to get into so I created this project to demonstrate my profeciency. Anyone could upload their photos to a CDN or S3 and serve their content from there. I put in the time and effort in essentially creating my own CDN. 
 
 
-
-
-
-
+<!-- MAIN FEATURES -->
+## Main Features
+<ol>
+  <li>
+    A docker compose file that quickly spins up the production environment. Where every technology listed above is spun up in its own container.. Some Main Features of that:
+    <ul>
+      <li>Automatic HTTPS set up. With an auto renewal script that checks every 12 hours if the servers certs are valid and renews them if not.</li>
+      <li>An NGINX HTTPS reverse proxy so I dont have to worry about setting up HTTPS for my Nodejs server. This also has a script that will reload the NGINX config file and HTTPS certs every 6 hours. </li>
+      <li></li>
+    </ul>
+  </li>
+</ol>
 <!-- LICENSE -->
 ## License
 
