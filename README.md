@@ -35,6 +35,10 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+This is the backend microservice for my photo/video sharing platform, Ourlife. 
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/alexbenko/ourlife-fe">Click me to see the repository for the front end code.</a> 
+</br>
+
 
 
 
