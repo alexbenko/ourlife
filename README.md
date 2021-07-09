@@ -40,10 +40,15 @@ Backend/DevOps is the software field I want to get into so I created this projec
     A docker compose file that quickly spins up the production environment. Where every technology listed above is spun up in its own container.. Some Main Features of that:
     <ul>
       <li>Automatic HTTPS set up. With an auto renewal script that checks every 12 hours if the servers certs are valid and renews them if not.</li>
-      <li>An NGINX HTTPS reverse proxy so I dont have to worry about setting up HTTPS for my Nodejs server. This also has a script that will reload the NGINX config file and HTTPS certs every 6 hours. </li>
-      <li></li>
+      <li>An NGINX HTTPS reverse proxy so I dont have to worry about setting up HTTPS for my Nodejs server. The nginx container also has a script that will reload the NGINX config file and HTTPS certs every 6 hours. </li>
+      <li>Containers start in proper order, ie the server will be started after the database is set up and nginx is only started after the server starts.</li>
     </ul>
   </li>
+  <li>Custom production logging that saves anything logged to its own file.</li>
+  <li>Cronjob that uploads all my log files to S3 and then deletes them</li>
+  <li>Cronjob that exports a backup of the Postgres database, uploads it to S3, and then deletes the backup file.</li>
+  <li>Honey pot endpoints that keep track of the ip of the request, stores it, and then 404s. Currently storing in redis</li>
+  <li>Custom Middleware that checks the ip of every request, if the ip is in the data store, 404s</li>
 </ol>
 
 <!-- LICENSE -->
