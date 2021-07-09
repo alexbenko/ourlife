@@ -13,7 +13,6 @@
   <h3 align="center">Ourlife</h3>
 
 ### Built With
-
 * [Nodejs](https://nodejs.org)
 * [Typescript](https://www.typescriptlang.org/docs/)
 * [Express](https://expressjs.com/)
@@ -46,6 +45,7 @@ Backend/DevOps is the software field I want to get into so I created this projec
     </ul>
   </li>
 </ol>
+
 <!-- LICENSE -->
 ## License
 
