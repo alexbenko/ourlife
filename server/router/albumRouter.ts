@@ -1,6 +1,6 @@
 import express from 'express'
 import db from '../postgresql/db'
-import log from '../logging/log'
+import log from '../lib/log'
 
 const router = express.Router()
 // child route of /api/albums

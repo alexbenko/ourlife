@@ -7,7 +7,7 @@ import cron from 'node-cron'
 import path from 'path'
 
 // custom packages
-import log from './logging/log'
+import log from './lib/log'
 import redisHelpers from './redis/redisHelpers'
 import backup from './jobs/backup'
 import db from './postgresql/db'

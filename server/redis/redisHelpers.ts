@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import log from '../logging/log'
+import log from '../lib/log'
 import client from './redisClient'
 
 const ipHashKey = 'bannedIp'
@@ -7,16 +7,6 @@ const ipHashKey = 'bannedIp'
 async function banIp (ip : string) {
   await client.setAsync(ip, JSON.stringify({ attempts: 0 }))
   log.info(`Banned Ip : ${ip}`)
-
-  /*
-  client.hmset(ipHashKey, { [ip]: 0 }, (err) => {
-    if (err) {
-      log.error(err)
-    } else {
-      log.info(`Banned Ip : ${ip}`)
-    }
-  })
-  */
 }
 
 /**
