@@ -21,8 +21,7 @@ require('dotenv').config()
 
 const app = express()
 
-const inProduction = process.env.ENVIRONMENT === 'production' || process.env.NODE_ENV === 'production'
-const environment = process.env.ENVIRONMENT
+const inProduction = process.env.NODE_ENV === 'production'
 const port = inProduction ? Number(process.env.PORT) : 8080
 
 app.use(express.json())
@@ -32,7 +31,7 @@ app.use(express.urlencoded({
 
 app.use(cors())
 app.use(helmet())
-if (!environment) {
+if (!process.env.PORT) {
   console.log('No .env file, please create one using the enviornment variables in the README')
   // dont want server to start if enviornment variables havent been set
   process.exit(1)
@@ -72,7 +71,10 @@ app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Re
   res.status(418).send(';)')
 })
 
-app.use(express.static(path.join(__dirname, '/static'), { dotfiles: 'allow' }))
+// in production the static folder volume is mounted inside the same directory.
+// since i dont want to upload the images to dockerhub, i have the static directory outside the server code
+const staticPath = inProduction ? '/static' : '../static'
+app.use(express.static(path.join(__dirname, staticPath), { dotfiles: 'allow' }))
 
 app.use('/api/albums', redisHelpers.isBanned, albumrouter)
 app.get('/', redisHelpers.isBanned, (req: express.Request, res: express.Response) => {
@@ -88,7 +90,7 @@ app.listen(port, async () => {
       seed()
     }
     console.log('Connected to database successfully!')
-    console.log(`app listening at http://localhost:${port} in ${environment} mode.`)
+    console.log(`app listening at http://localhost:${port} in ${inProduction ? 'production' : 'development'} mode.`)
   } catch (err) {
     console.log(err)
     log.error(`Error connecting to Postgres: \n ${err.message}`)
