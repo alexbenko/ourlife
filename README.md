@@ -12,33 +12,44 @@
 
   <h3 align="center">Ourlife</h3>
 
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
-  </ol>
-</details>
-
 ### Built With
-
 * [Nodejs](https://nodejs.org)
 * [Typescript](https://www.typescriptlang.org/docs/)
 * [Express](https://expressjs.com/)
 * [Redis](https://github.com/NodeRedis/node-redis)
 * [Postgres](https://www.postgresql.org/docs/13/index.html)
 * [Docker](https://docs.docker.com/)
+* [Nginx](http://nginx.org/en/docs/)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+This is the backend microservice for my photo/video sharing platform, Ourlife. 
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/alexbenko/ourlife-fe">Click me to see the repository for the front end code.</a> 
+</br>
+PLEASE keep in mind this project is still in the early stages.
+
+I go on a lot of trips and do a lot of picture worthy things. As a result my phone is almost out of storage. I wanted to create a website where I could upload my photos to, so I no longer had to store them on my phone.
+
+Backend/DevOps is the software field I want to get into so I created this project to demonstrate my profeciency. Anyone could upload their photos to a CDN or S3 and serve their content from there. I put in the time and effort in essentially creating my own CDN. 
 
 
-
-
+<!-- MAIN FEATURES -->
+## Main Features
+<ol>
+  <li>
+    A docker compose file that quickly spins up the production environment. Where every technology listed above is spun up in its own container.. Some Main Features of that:
+    <ul>
+      <li>Automatic HTTPS set up. With an auto renewal script that checks every 12 hours if the servers certs are valid and renews them if not.</li>
+      <li>An NGINX HTTPS reverse proxy so I dont have to worry about setting up HTTPS for my Nodejs server. The nginx container also has a script that will reload the NGINX config file and HTTPS certs every 6 hours. </li>
+      <li>Containers start in proper order, ie the server will be started after the database is set up and nginx is only started after the server starts.</li>
+    </ul>
+  </li>
+  <li>Custom production logging that saves anything logged to its own file.</li>
+  <li>Cronjob that uploads all my log files to S3 and then deletes them</li>
+  <li>Cronjob that exports a backup of the Postgres database, uploads it to S3, and then deletes the backup file.</li>
+  <li>Honey pot endpoints that keep track of the ip of the request, stores it, and then 404s. Currently storing in redis</li>
+  <li>Custom Middleware that checks the ip of every request, if the ip is in the data store, 404s</li>
+</ol>
 
 <!-- LICENSE -->
 ## License
