@@ -4,7 +4,7 @@ COPY ./package.json .
 COPY ./package-lock.json .
 # WORKDIR /dist
 
-RUN npm install
+RUN npm install --only=prod
 COPY . .
 
 EXPOSE 8080
