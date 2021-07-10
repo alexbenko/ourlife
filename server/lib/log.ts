@@ -1,6 +1,6 @@
 import path from 'path'
 import moment from 'moment-timezone'
-import sendErrorEmail from '../email/sendErrorEmail'
+import sendEmail from '../email/sendEmail'
 
 require('dotenv').config()
 const rfs = require('rotating-file-stream')
@@ -22,12 +22,13 @@ const generateTimeStamp = () => moment().tz('America/Los_Angeles').format('hh:mm
 /**
    * Used To log any errors to aid in debugging and have a permanent record of them.
    * @param err - the error thrown , ie in the catch block OR in a if(conditionNotMet) {}
+   * @param shouldSendEmail - Whether or not to send info logged in an email. Defaults to false
 */
-const error = function (err:string, sendEmail = false) {
+const error = function (err:string, shouldSendEmail = false) {
   if (!inProduction) {
     console.log('\x1b[31m', err)
   } else {
-    if (sendEmail) sendErrorEmail('ENCOUNTERED ERROR IN PRODUCTION', err)
+    if (shouldSendEmail) sendEmail('ENCOUNTERED ERROR IN PRODUCTION', err)
     const date = generateDatestamp()
     const time = generateTimeStamp()
     const toErrorLog = rfs.createStream(`${date}.log`, {
@@ -41,11 +42,13 @@ const error = function (err:string, sendEmail = false) {
 /**
    * Used To log any general info about the application. Useful for statistics, keeping track of how many times your endpoint.
    * @param info - the error thrown , ie in the catch block OR in a if(conditionNotMet) {}
+   * @param shouldSendEmail - Whether or not to send info logged in an email. Defaults to false
 */
-const info = function (info : any) {
+const info = function (info : string, shouldSendEmail = false) {
   if (!inProduction) {
     console.log('\x1b[36m%s\x1b[0m', info)
   } else {
+    if (shouldSendEmail) sendEmail('Info About Ourlife server', info)
     const date = generateDatestamp()
     const time = generateTimeStamp()
     const toInfoLog = rfs.createStream(`${date}.log`, {
