@@ -20,7 +20,10 @@ const rfs = require('rotating-file-stream')
 require('dotenv').config()
 
 const app = express()
-const port = process.env.ENVIRONMENT === 'production' ? Number(process.env.PORT) : 8080
+
+const inProduction = process.env.ENVIRONMENT === 'production' || process.env.NODE_ENV === 'production'
+const environment = process.env.ENVIRONMENT
+const port = inProduction ? Number(process.env.PORT) : 8080
 
 app.use(express.json())
 app.use(express.urlencoded({
@@ -29,8 +32,6 @@ app.use(express.urlencoded({
 
 app.use(cors())
 app.use(helmet())
-
-const environment = process.env.ENVIRONMENT
 if (!environment) {
   console.log('No .env file, please create one using the enviornment variables in the README')
   // dont want server to start if enviornment variables havent been set
@@ -40,7 +41,7 @@ if (!environment) {
   process.exit(1)
 }
 // if in dev mode
-if (environment !== 'production') {
+if (!inProduction) {
   console.log('Development Mode detected, all logs will be logged to console instead of saving them.')
   app.use(morgan('dev'))
 } else {

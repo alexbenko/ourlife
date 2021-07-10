@@ -2,10 +2,9 @@ import path from 'path'
 import moment from 'moment-timezone'
 
 require('dotenv').config()
-
 const rfs = require('rotating-file-stream')
 
-const environment = process.env.ENVIRONMENT
+const inProduction = process.env.ENVIRONMENT === 'production' || process.env.NODE_ENV === 'production'
 
 function generateDatestamp () {
   const dateObj = new Date()
@@ -24,7 +23,7 @@ const generateTimeStamp = () => moment().tz('America/Los_Angeles').format('hh:mm
    * @param err - the error thrown , ie in the catch block OR in a if(conditionNotMet) {}
 */
 const error = function (err : any) {
-  if (environment !== 'production') {
+  if (!inProduction) {
     console.log('\x1b[31m', err)
   } else {
     // TODO: eventually add boolean flag that will message a designated error slack channel
@@ -43,7 +42,7 @@ const error = function (err : any) {
    * @param info - the error thrown , ie in the catch block OR in a if(conditionNotMet) {}
 */
 const info = function (info : any) {
-  if (environment !== 'production') {
+  if (!inProduction) {
     console.log('\x1b[36m%s\x1b[0m', info)
   } else {
     const date = generateDatestamp()
