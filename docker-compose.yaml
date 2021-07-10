@@ -26,6 +26,7 @@ services:
     environment:
       REDIS_URL: redis://store
       PORT: 8080
+      NODE_ENV: production
     ports:
       - "8080:8080"
     command: npm start
