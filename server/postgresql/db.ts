@@ -1,11 +1,11 @@
 import { Pool } from 'pg'
-import log from '../logging/log'
+import log from '../lib/log'
 
 const pool = new Pool({
-  user: process.env.PG_USER,
+  user: process.env.NODE_ENV === 'production' ? process.env.PG_USER : process.env.PG_USER_LOCAL,
   password: process.env.DB_PASS,
   database: process.env.PG_DB,
-  host: 'postgres',
+  host: process.env.NODE_ENV === 'production' ? process.env.PG_USER : null,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000
