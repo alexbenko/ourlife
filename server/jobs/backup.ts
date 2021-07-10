@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk'
 import fs from 'fs'
 import path from 'path'
+import log from '../lib/log'
 import { promisify } from 'util'
 import { exec } from 'child_process'
 require('dotenv').config()
