@@ -4,7 +4,11 @@ import client from './redisClient'
 
 const ipHashKey = 'bannedIp'
 
-function banIp (ip : string) {
+async function banIp (ip : string) {
+  await client.setAsync(ip, JSON.stringify({ attempts: 0 }))
+  log.info(`Banned Ip : ${ip}`)
+
+  /*
   client.hmset(ipHashKey, { [ip]: 0 }, (err) => {
     if (err) {
       log.error(err)
@@ -12,13 +16,14 @@ function banIp (ip : string) {
       log.info(`Banned Ip : ${ip}`)
     }
   })
+  */
 }
 
 /**
  * Middleware that checks the ip of every request and compares it to the banned ip dataset. If the ip is in the dataset,
  * It 404s. Only meant to be used as a midddleware function
  */
-async function isBanned (ip : string, res: Response, next: NextFunction): Promise<void> {
+async function isBanned (ip : string, req: Request, res: Response, next: NextFunction) {
   try {
     const data: string[] = await client.hmgetAsync(ipHashKey, ip)
     if (data[0]) {
