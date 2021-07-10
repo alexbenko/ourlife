@@ -12,10 +12,14 @@ router.get('/all', async (req, res) => {
 })
 
 router.get('/:albumId', async (req, res) => {
-  const { albumId } = req.params
-  console.info(albumId)
-  const album = await db('SELECT * FROM images WHERE album_id = $1', [albumId])
-  res.send(album)
+  try {
+    const { albumId } = req.params
+    const album = await db('SELECT * FROM images WHERE album_id = $1', [albumId])
+    res.send(album)
+  } catch (err) {
+    log.error(`Error Retrieving Albumid:${req.params.albumId}: ${err}`)
+    res.status(400)
+  }
 })
 
 export default router
