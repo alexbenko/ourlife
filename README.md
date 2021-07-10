@@ -28,7 +28,7 @@ This is the backend microservice for my photo/video sharing platform, Ourlife.
 </br>
 PLEASE keep in mind this project is still in the early stages.
 
-My partner and I go on a lot of trips and do a lot of fun things. We like taking pictures of everything we do, and as a result both of our phones are almost out of storage. I wanted to create a website where we could upload our photos to, so we no longer had to store them on our phone and have a way for our family and friends to see what we are up to. 
+I go on a lot of trips and do a lot of picture worthy things. As a result my phone is almost out of storage. I wanted to create a website where I could upload my photos to, so I no longer had to store them on my phone.
 
 Backend/DevOps is the software field I want to get into so I created this project to demonstrate my profeciency. Anyone could upload their photos to a CDN or S3 and serve their content from there. I put in the time and effort in essentially creating my own CDN. 
 
