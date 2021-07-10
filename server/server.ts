@@ -74,6 +74,9 @@ app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Re
 app.use(express.static(path.join(__dirname, '/static'), { dotfiles: 'allow' }))
 
 app.use('/api/albums', redisHelpers.isBanned, albumrouter)
+app.get('/', redisHelpers.isBanned, (req: express.Request, res: express.Response) => {
+  res.send('Welcome To the Backend Service for Ourlife. Made by Alexander Benko')
+})
 app.listen(port, async () => {
   try {
     const test = await db('SELECT * FROM albums;')
