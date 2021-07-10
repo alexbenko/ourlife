@@ -15,7 +15,7 @@ const sendEmail = function (subject = 'No Subject Set', text = 'No Text Set') {
     from: process.env.EMAIL,
     to: process.env.MY_EMAIL,
     subject: subject,
-    text: text
+    text: JSON.stringify(text)
   }
 
   transporter.sendMail(mailOptions, function (error, info) {
