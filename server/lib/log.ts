@@ -1,5 +1,6 @@
 import path from 'path'
 import moment from 'moment-timezone'
+import sendErrorEmail from '../email/sendErrorEmail'
 
 require('dotenv').config()
 const rfs = require('rotating-file-stream')
@@ -22,11 +23,11 @@ const generateTimeStamp = () => moment().tz('America/Los_Angeles').format('hh:mm
    * Used To log any errors to aid in debugging and have a permanent record of them.
    * @param err - the error thrown , ie in the catch block OR in a if(conditionNotMet) {}
 */
-const error = function (err : any) {
+const error = function (err:string, sendEmail = false) {
   if (!inProduction) {
     console.log('\x1b[31m', err)
   } else {
-    // TODO: eventually add boolean flag that will message a designated error slack channel
+    if (sendEmail) sendErrorEmail('ENCOUNTERED ERROR IN PRODUCTION', err)
     const date = generateDatestamp()
     const time = generateTimeStamp()
     const toErrorLog = rfs.createStream(`${date}.log`, {
