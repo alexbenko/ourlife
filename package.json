@@ -7,7 +7,7 @@
     "dev": "nodemon",
     "start": "node dist/server.js",
     "build": "tsc",
-    "schema": "psql -U photo -d photobooth -f schema.sql",
+    "schema": "psql -U photo -d photobooth -f ./docker/schema.sql",
     "compose:build": "npm run build && docker-compose down && docker-compose up --build",
     "docker:server:build": "npm run build && docker build -t ourlife_server -f ./docker/app.Dockerfile .",
     "docker:server:push": "docker tag ourlife_server alexbenko/ourlife_server && docker push alexbenko/ourlife_server",
