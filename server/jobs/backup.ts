@@ -66,7 +66,7 @@ const backupLogs = async function () {
     fs.rmdirSync(logFolderPath, { recursive: true })
     return true
   } catch (err) {
-    log.error(`Error Backingup Logs: ${err}`)
+    log.error(`Error Backingup Logs: ${err}`, true)
     return false
   }
 }
@@ -104,7 +104,7 @@ const backupDb = async function () {
     })
     fs.unlinkSync(dbBackupFilePath)
   } catch (err) {
-    log.error(`Error backing up Database: ${err}`)
+    log.error(`Error backing up Database: ${err}`, true)
   }
 }
 
