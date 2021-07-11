@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 const sendEmail = function (subject = 'No Subject Set', text = 'No Text Set') {
   const mailOptions = {
-    from: process.env.EMAIL,
+    from: 'Our Life Server',
     to: process.env.MY_EMAIL,
     subject: subject,
     text: JSON.stringify(text)
