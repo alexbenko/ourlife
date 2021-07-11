@@ -91,6 +91,7 @@ app.listen(port, async () => {
     }
     console.log('Connected to database successfully!')
     console.log(`app listening at http://localhost:${port} in ${inProduction ? 'production' : 'development'} mode.`)
+    log.info(`Started Server On ${Date.now()}`, true)
   } catch (err) {
     console.log(err)
     log.error(`Error connecting to Postgres: \n ${err.message}`)
@@ -100,6 +101,6 @@ app.listen(port, async () => {
 
 process.on('uncaughtException', err => {
   console.log(err)
-  log.error(`Uncaught Error: ${err}`)
+  log.error(`Uncaught Error: ${err}`, true)
   process.exit(1) // manadatory (as per the Node.js docs)
 })
