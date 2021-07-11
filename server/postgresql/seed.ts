@@ -28,7 +28,8 @@ const formatAlbumName = (text:string) => {
 }
 
 const saveFilePaths = async () => {
-  const photoFolderPath = path.join(__dirname, '../static/photos')
+  const staticFilePath = process.env.NODE_ENV === 'production' ? '../static/photos' : '../../static/photos'
+  const photoFolderPath = path.join(__dirname, staticFilePath)
   const albums = await fsAsync.readdir(photoFolderPath)
 
   // eslint-disable-next-line array-callback-return
