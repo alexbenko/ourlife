@@ -4,6 +4,6 @@
 .eslintrc.json
 .gitignore
 nodemon.json
-README
+README.md
 tsconfig.json
 node_modules
