@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo docker-compose exec postgres bash
 if [ -f .env ]; then
   # load environment variables into bash script
   export $(cat .env)
