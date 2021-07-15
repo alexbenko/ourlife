@@ -6,6 +6,7 @@ services:
       - "5432:5432"
     volumes:
        - ./postgres-data:/var/lib/postgresql/data
+       - ./backups:/backups
 
   redis:
     image: redis
@@ -23,6 +24,7 @@ services:
     volumes:
       - ./static:/dist/static
       - ./logs:/dist/logs
+      - ./backups:/dist/backups
     environment:
       REDIS_URL: redis://store
       PORT: 8080
