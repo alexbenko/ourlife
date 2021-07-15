@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import log from '../lib/log'
+import log from './log'
 require('dotenv').config()
 
 const transporter = nodemailer.createTransport({
