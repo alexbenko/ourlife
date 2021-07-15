@@ -7,9 +7,9 @@ import cron from 'node-cron'
 import path from 'path'
 
 // custom packages
-import log from './lib/log'
+import { log } from './lib'
 import redisHelpers from './redis/redisHelpers'
-import backup from './jobs/backup'
+import { backupLogs, backupPostgres } from './jobs'
 import db from './postgresql/db'
 import seed from './postgresql/seed'
 
@@ -62,8 +62,8 @@ if (!inProduction) {
   app.use(morgan('combined', { stream: accessLogStream }))
 
   // all cronjobs should go here     0 0 * * FRI
-  cron.schedule('0 0 * * FRI', backup.backupLogs) // friday at midniight
-  cron.schedule('0 0 * * * ', backup.backupDb) // every day at midnight
+  cron.schedule('0 0 * * FRI', backupLogs) // friday at midniight
+  cron.schedule('0 0 * * * ', backupPostgres) // every day at midnight
 }
 
 app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Response) => {

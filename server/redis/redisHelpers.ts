@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import log from '../lib/log'
+import { log } from '../lib'
 import client from './redisClient'
 
 const ipHashKey = 'bannedIp'

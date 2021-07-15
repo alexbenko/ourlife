@@ -1,5 +1,5 @@
 import { Pool } from 'pg'
-import log from '../lib/log'
+import { log } from '../lib'
 
 const pool = new Pool({
   user: process.env.NODE_ENV === 'production' ? process.env.PG_USER : process.env.PG_USER_LOCAL,
