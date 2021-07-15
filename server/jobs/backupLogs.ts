@@ -1,12 +1,10 @@
 import AWS from 'aws-sdk'
 import path from 'path'
 import fs from 'fs'
+
 import { fsAsync, log } from '../lib'
-interface s3Params{
-  Bucket: string,
-  Key: string,
-  Body: Buffer
-}
+import { s3Params } from '../interfaces/aws'
+
 require('dotenv').config()
 
 const bucketName = process.env.S3_BUCKET_NAME
