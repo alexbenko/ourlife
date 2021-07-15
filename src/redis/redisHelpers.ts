@@ -17,7 +17,7 @@ async function isBanned (ip : string, req: Request, res: Response, next: NextFun
   try {
     const data: string[] = await client.hmgetAsync(ipHashKey, ip)
     if (data[0]) {
-      log.info(`Attempt from banned ip adress : ${ip}`)
+      log.info(`Attempt from banned ip adress : ${ip}`, true)
       let parsedValue = Number(data[0])
       parsedValue++
 

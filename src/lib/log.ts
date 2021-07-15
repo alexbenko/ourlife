@@ -24,7 +24,7 @@ const generateTimeStamp = () => moment().tz('America/Los_Angeles').format('hh:mm
    * @param err - the error thrown , ie in the catch block OR in a if(conditionNotMet) {}
    * @param shouldSendEmail - Whether or not to send info logged in an email. Defaults to false
 */
-const error = function (err:string, shouldSendEmail = false) {
+const error = function (err:string, shouldSendEmail = true) {
   if (!inProduction) {
     console.log('\x1b[31m', err)
   } else {
