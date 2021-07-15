@@ -2,31 +2,28 @@ import { exec } from 'child_process'
 import path from 'path'
 import AWS from 'aws-sdk'
 import fs from 'fs'
+
 import { log, fsAsync } from '../lib'
+import { s3Params } from '../interfaces/aws'
 require('dotenv').config()
 
 const bucketName = process.env.S3_BUCKET_NAME
 
-interface s3Params{
-  Bucket: string,
-  Key: string,
-  Body: Buffer
-}
 export default async function () {
   try {
     log.info('Backing up database to S3')
 
     // this is in a async function to ensure the database is dumped before upload
     const dumpDB = async () => {
-      const backupScriptPath = path.join(__dirname, '../scripts/backup_pg.sh')
+      const backupScriptPath = path.join(__dirname, '../../scripts/backup_pg.sh')
       exec(`sh ${backupScriptPath}`, (error, stdout) => {
         if (error !== null) throw error
-        if (stdout.includes('.env')) throw stdout
+        if (stdout.includes('Cant')) throw stdout
       })
     }
 
     await dumpDB()
-    const dbBackupFilePath = path.join(__dirname, '../../db_backup.bak')
+    const dbBackupFilePath = path.join(__dirname, '../backups/db_backup.bak')
     const fileBuffer = await fsAsync.readFile(dbBackupFilePath)
 
     const params : s3Params = {
