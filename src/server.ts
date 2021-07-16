@@ -7,7 +7,7 @@ import cron from 'node-cron'
 import path from 'path'
 
 // custom packages
-import { log } from './lib'
+import { log, dateStamp } from './lib'
 import redisHelpers from './redis/redisHelpers'
 import { backupLogs, backupPostgres } from './jobs'
 import db from './postgresql/db'
@@ -87,11 +87,11 @@ app.listen(port, async () => {
       console.log('DB is not set up, seeding...')
       // TODO: add some sort of boolean flag once app is deployed so instead of running this script, it will pull pgdump file from S3
       // and then import it
-      seed()
+      await seed()
     }
     console.log('Connected to database successfully!')
     console.log(`app listening at http://localhost:${port} in ${inProduction ? 'production' : 'development'} mode.`)
-    log.info(`Started Server On ${Date.now()}`, true)
+    log.info(`Started Server On ${dateStamp(new Date())}`, true)
   } catch (err) {
     console.log(err)
     log.error(`Error connecting to Postgres: \n ${err.message}`)
