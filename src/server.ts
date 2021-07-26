@@ -7,14 +7,16 @@ import cron from 'node-cron'
 import path from 'path'
 
 // custom packages
-import { log, dateStamp } from './lib'
+import { log, randomString } from './lib'
 import redisHelpers from './redis/redisHelpers'
 import { backupLogs, backupPostgres } from './jobs'
 import db from './postgresql/db'
 import seed from './postgresql/seed'
+import render from './emails/render'
 
 // routers
-import albumrouter from './router/albumRouter'
+import albumRouter from './router/albumRouter'
+import logRouter from './router/adminRouter'
 
 const rfs = require('rotating-file-stream')
 require('dotenv').config()
@@ -31,6 +33,7 @@ app.use(express.urlencoded({
 
 app.use(cors())
 app.use(helmet())
+
 if (!process.env.PORT) {
   console.log('No .env file, please create one using the enviornment variables in the README')
   // dont want server to start if enviornment variables havent been set
@@ -76,10 +79,33 @@ app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Re
 const staticPath = inProduction ? '/static' : '../static'
 app.use(express.static(path.join(__dirname, staticPath), { dotfiles: 'allow' }))
 
-app.use('/api/albums', redisHelpers.isBanned, albumrouter)
+app.use('/api/albums', redisHelpers.isBanned, albumRouter)
+
+const UNIQUE_ADMIN_ROUTE = randomString(16)
+app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, async (req, res, next) => {
+  console.log(req.originalUrl.split('/'))
+  // if request is more than /randomstring/admin pass request to the router
+  // otherwise render the admin page
+  if (req.originalUrl.split('/').length > 3) {
+    next()
+  } else {
+    const adminUrl = `${process.env.PRODUCTION_URL}/${UNIQUE_ADMIN_ROUTE}/admin`
+    const templateParams = {
+      startTime: new Date(),
+      serverUrl: adminUrl,
+      endpoints: ['/status', '/error/today']
+    }
+    const templatePath = path.join(__dirname, '../views/adminIndex.hbs')
+    const template = await render(templatePath, templateParams)
+    // if you are unfamilar with tempura, this function returns an html string
+    res.send(template)
+  }
+}, logRouter)
+
 app.get('/', redisHelpers.isBanned, (req: express.Request, res: express.Response) => {
   res.send('Welcome To the Backend Service for Ourlife. Made by Alexander Benko')
 })
+
 app.listen(port, async () => {
   try {
     const test = await db('SELECT * FROM albums;')
@@ -90,8 +116,14 @@ app.listen(port, async () => {
       await seed()
     }
     console.log('Connected to database successfully!')
-    console.log(`app listening at http://localhost:${port} in ${inProduction ? 'production' : 'development'} mode.`)
-    log.info(`Started Server On ${dateStamp(new Date())}`, true)
+    const urlToLog = inProduction ? process.env.PRODUCTION_URL : 'http://localhost'
+    console.log(
+      `app listening at ${urlToLog}:${port} in ${inProduction ? 'production' : 'development'} mode.`
+    )
+    log.info(
+      `Started Server On ${new Date()}.
+      Admin Route : ${urlToLog}:${port}/${UNIQUE_ADMIN_ROUTE}/admin
+    `, true)
   } catch (err) {
     console.log(err)
     log.error(`Error connecting to Postgres: \n ${err.message}`)
