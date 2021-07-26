@@ -13,7 +13,7 @@ router.get('/error/today', async (req : Request, res: Response) => {
   } catch (err) {
     console.log(err)
     log.error(`Error retrieving recent error log: ${err}`)
-    res.status(404)
+    res.status(400).send('Failed To Retrieve File.')
   }
 })
 
