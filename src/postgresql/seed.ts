@@ -36,9 +36,9 @@ const saveFilePaths = async () => {
   const result = await Promise.all(albums.map(async (album) => {
     if (album.includes('.')) return false // these are directories and should not include any files
 
-    const albumName = formatAlbumName(album)
-    await db('INSERT INTO ALBUMS(album_name) VALUES($1);', [albumName])
-    const albumId = await db('SELECT id FROM albums WHERE album_name = $1;', [albumName])
+    // const albumName = formatAlbumName(album)
+    await db('INSERT INTO ALBUMS(dirName, displayName) VALUES($1, $2);', [album, formatAlbumName(album)])
+    const albumId = await db('SELECT id FROM albums WHERE dirName = $1;', [album])
     const { id } = albumId[0]
 
     const fullAlbumPath = `${photoFolderPath}/${album}`
@@ -46,7 +46,7 @@ const saveFilePaths = async () => {
     const imagePaths = imagesInAlbum.filter(img => img !== '.DS_Store').map(img => fullAlbumPath + '/' + img)
 
     for (const imageUrl of imagePaths) {
-      await db('INSERT INTO IMAGES(album_id, img_url) VALUES($1,$2);', [id, imageUrl.split('/photos')[1]])
+      await db('INSERT INTO IMAGES(albumId, imgUrl) VALUES($1,$2);', [id, imageUrl.split('/photos')[1]])
     }
     return true
   }))
