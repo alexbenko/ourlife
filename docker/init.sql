@@ -1,29 +1,29 @@
-CREATE USER photo;
 CREATE DATABASE photobooth;
-GRANT ALL PRIVILEGES ON DATABASE photobooth TO photo;
+GRANT ALL PRIVILEGES ON DATABASE photobooth TO postgres;
 
 DROP TABLE IF EXISTS albums CASCADE;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS users;
 
-\c photobooth photo;
+\c photobooth postgres;
 CREATE TABLE albums(
   id SERIAL primary key,
-  album_name VARCHAR(255) NOT NULL,
-  album_desc VARCHAR(560) DEFAULT NULL,
-  created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now()
+  dirname VARCHAR(255) NOT NULL,
+  displayname VARCHAR(255) NOT NULL,
+  albumdesc VARCHAR(560) DEFAULT NULL,
+  createdat TIMESTAMP DEFAULT now(),
+  updatedat TIMESTAMP DEFAULT now()
 );
 
 CREATE TABLE images(
-  img_id SERIAL primary key,
-  album_id INT,
-  img_name VARCHAR(255) DEFAULT NULL,
-  img_desc VARCHAR(560) DEFAULT NULL,
-  img_url VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now(),
-  FOREIGN KEY(album_id)
+  imgid SERIAL primary key,
+  albumid INT,
+  imgname VARCHAR(255) DEFAULT NULL,
+  imgdesc VARCHAR(560) DEFAULT NULL,
+  imgurl VARCHAR(255) NOT NULL,
+  createdat TIMESTAMP DEFAULT now(),
+  updatedat TIMESTAMP DEFAULT now(),
+  FOREIGN KEY(albumid)
     REFERENCES albums(id)
       ON DELETE SET NULL
 );
