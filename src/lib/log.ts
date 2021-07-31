@@ -22,7 +22,7 @@ const generateTimeStamp = () => moment().tz('America/Los_Angeles').format('hh:mm
 /**
    * Used To log any errors to aid in debugging and have a permanent record of them.
    * @param err - the error thrown , ie in the catch block OR in a if(conditionNotMet) {}
-   * @param shouldSendEmail - Whether or not to send info logged in an email. Defaults to false
+   * @param shouldSendEmail - Whether or not to send info logged in an email. Defaults to true
 */
 const error = function (err:string, shouldSendEmail = true) {
   if (!inProduction) {
@@ -40,8 +40,9 @@ const error = function (err:string, shouldSendEmail = true) {
 }
 
 /**
-   * Used To log any general info about the application. Useful for statistics, keeping track of how many times your endpoint.
-   * @param info - the error thrown , ie in the catch block OR in a if(conditionNotMet) {}
+   * Used To log any general info about the application. Useful for statistics, keeping track of how many times an endpoint is hit.
+   * I will probably write a script that reads through them all and returns the most commonly attempted endpoints
+   * @param info - any info you want logged
    * @param shouldSendEmail - Whether or not to send info logged in an email. Defaults to false
 */
 const info = function (info : string, shouldSendEmail = false) {
