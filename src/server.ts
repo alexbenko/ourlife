@@ -82,7 +82,7 @@ app.use(express.static(path.join(__dirname, staticPath), { dotfiles: 'allow' }))
 
 // all routers go here
 app.use('/api/albums', redisHelpers.isBanned, albumRouter)
-app.use('/api/albums', redisHelpers.isBanned, uploadRouter)
+app.use('/api/upload', redisHelpers.isBanned, uploadRouter)
 
 const UNIQUE_ADMIN_ROUTE = randomString(16)
 app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, redisHelpers.isBanned, async (req, res, next) => {
