@@ -7,7 +7,7 @@ import cron from 'node-cron'
 import path from 'path'
 
 // custom packages
-import { log, randomString } from './lib'
+import { log, randomString, dateStamp } from './lib'
 import redisHelpers from './redis/redisHelpers'
 import { backupLogs, backupPostgres } from './jobs'
 import db from './postgresql/db'
@@ -17,6 +17,7 @@ import render from './emails/render'
 // routers
 import albumRouter from './router/albumRouter'
 import logRouter from './router/adminRouter'
+import uploadRouter from './router/uploadRouter'
 
 const rfs = require('rotating-file-stream')
 require('dotenv').config()
@@ -79,10 +80,12 @@ app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Re
 const staticPath = inProduction ? '/static' : '../static'
 app.use(express.static(path.join(__dirname, staticPath), { dotfiles: 'allow' }))
 
+// all routers go here
 app.use('/api/albums', redisHelpers.isBanned, albumRouter)
+app.use('/api/albums', redisHelpers.isBanned, uploadRouter)
 
 const UNIQUE_ADMIN_ROUTE = randomString(16)
-app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, async (req, res, next) => {
+app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, redisHelpers.isBanned, async (req, res, next) => {
   console.log(req.originalUrl.split('/'))
   // if request is more than /randomstring/admin pass request to the router
   // otherwise render the admin page
@@ -91,13 +94,14 @@ app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, async (req, res, next) => {
   } else {
     const adminUrl = `${process.env.PRODUCTION_URL}/${UNIQUE_ADMIN_ROUTE}/admin`
     const templateParams = {
-      startTime: new Date(),
+      startTime: dateStamp(new Date()),
       serverUrl: adminUrl,
-      endpoints: ['/status', '/error/today']
+      endpoints: ['/status', '/errors/today']
     }
     const templatePath = path.join(__dirname, '../views/adminIndex.hbs')
     const template = await render(templatePath, templateParams)
     // if you are unfamilar with tempura, this function returns an html string
+    // this is similar to how the view engine works for express
     res.send(template)
   }
 }, logRouter)
@@ -116,13 +120,12 @@ app.listen(port, async () => {
       await seed()
     }
     console.log('Connected to database successfully!')
-    const urlToLog = inProduction ? process.env.PRODUCTION_URL : 'http://localhost'
+    const urlToLog = inProduction ? process.env.PRODUCTION_URL : `http://localhost:${port}`
     console.log(
-      `app listening at ${urlToLog}:${port} in ${inProduction ? 'production' : 'development'} mode.`
+      `app listening at ${urlToLog} in ${inProduction ? 'production' : 'development'} mode.`
     )
     log.info(
-      `Started Server On ${new Date()}.
-      Admin Route : ${urlToLog}:${port}/${UNIQUE_ADMIN_ROUTE}/admin
+      `Started Server On ${new Date()}. Admin Route : ${urlToLog}/${UNIQUE_ADMIN_ROUTE}/admin
     `, true)
   } catch (err) {
     console.log(err)
