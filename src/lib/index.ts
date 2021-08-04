@@ -1,7 +1,6 @@
 import fsAsync from './fsAsync'
 import log from './log'
 import randomString from './randomString'
-import sendEmail from './sendEmail'
 import compress from './compress'
 import dateStamp from './dateStamp'
 
@@ -10,7 +9,6 @@ export {
   fsAsync,
   log,
   randomString,
-  sendEmail,
   compress,
   dateStamp
 }

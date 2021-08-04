@@ -1,6 +1,6 @@
 import path from 'path'
 import moment from 'moment-timezone'
-import sendEmail from './sendEmail'
+import { sendEmail } from '../emails'
 
 require('dotenv').config()
 const rfs = require('rotating-file-stream')
