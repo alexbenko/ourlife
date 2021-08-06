@@ -4,40 +4,51 @@ import client from './redisClient'
 
 const ipHashKey = 'bannedIp'
 
-async function banIp (ip : string) {
-  await client.setAsync(ip, JSON.stringify({ attempts: 0 }))
+function banIp (ip : string) {
+  client.hmsetAsync(ipHashKey, { [ip]: 0 })
   log.info(`Banned Ip : ${ip}`)
+}
+
+async function get (key: string) {
+  return client.getAsync(key)
+}
+
+async function set (key, value, expiration = null) {
+  client.setAsync(key, value as string, expiration ? 'EX' : null, expiration)
 }
 
 /**
  * Middleware that checks the ip of every request and compares it to the banned ip dataset. If the ip is in the dataset,
  * It 404s. Only meant to be used as a midddleware function
  */
-async function isBanned (ip : string, req: Request, res: Response, next: NextFunction) {
+async function isBanned (req: Request, res: Response, next: NextFunction) {
   try {
-    const data: string[] = await client.hmgetAsync(ipHashKey, ip)
-    if (data[0]) {
+    const ip = req.ip
+    const data: string[] = await client.hgetAsync(ipHashKey, ip)
+    if (data) {
       log.info(`Attempt from banned ip adress : ${ip}`, true)
       let parsedValue = Number(data[0])
       parsedValue++
 
       // key value looks like [ip] : [number of attempts since banned]
       // if an ip attempts againt this increments the value to keep track in case you need to know.
-      client.hmset(ipHashKey, { [ip]: parsedValue })
+      client.hmsetAsync(ipHashKey, { [ip]: parsedValue })
 
-      res.status(404)
+      res.status(404).send('😉')
     } else {
       next()
     }
   } catch (err) {
     log.error(`Error Checking Ip: ${err}`)
-    res.status(404)
+    res.status(400).send('Error')
   }
 }
 
 const redisHelpers = {
   banIp,
-  isBanned
+  isBanned,
+  get,
+  set,
 }
 
 export default redisHelpers
