@@ -9,15 +9,17 @@ import path from 'path'
 // custom packages
 import { log, randomString, dateStamp } from './lib'
 import redisHelpers from './redis/redisHelpers'
-import { backupLogs, backupPostgres } from './jobs'
+import { backupLogs } from './jobs'
 import db from './postgresql/db'
 import seed from './postgresql/seed'
 import render from './emails/render'
+import checkToken from './middleware/checkToken'
 
 // routers
 import albumRouter from './router/albumRouter'
 import logRouter from './router/adminRouter'
 import uploadRouter from './router/uploadRouter'
+import authRouter from './router/authRouter'
 
 const rfs = require('rotating-file-stream')
 require('dotenv').config()
@@ -67,13 +69,9 @@ if (!inProduction) {
 
   // all cronjobs should go here     0 0 * * FRI
   cron.schedule('0 0 * * FRI', backupLogs) // friday at midniight
-  cron.schedule('0 0 * * * ', backupPostgres) // every day at midnight
+  // dont need to backup right now
+  // cron.schedule('0 0 * * * ', backupPostgres) // every day at midnight
 }
-
-app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Response) => {
-  redisHelpers.banIp(req.ip)
-  res.status(418).send(';)')
-})
 
 // in production the static folder volume is mounted inside the same directory.
 // since i dont want to upload the images to dockerhub, i have the static directory outside the server code
@@ -83,10 +81,10 @@ app.use(express.static(path.join(__dirname, staticPath), { dotfiles: 'allow' }))
 // all routers go here
 app.use('/api/albums', redisHelpers.isBanned, albumRouter)
 app.use('/api/upload', redisHelpers.isBanned, uploadRouter)
+app.use('/api/auth', redisHelpers.isBanned, checkToken, authRouter)
 
 const UNIQUE_ADMIN_ROUTE = randomString(16)
 app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, redisHelpers.isBanned, async (req, res, next) => {
-  console.log(req.originalUrl.split('/'))
   // if request is more than /randomstring/admin pass request to the router
   // otherwise render the admin page
   if (req.originalUrl.split('/').length > 3) {
@@ -105,6 +103,11 @@ app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, redisHelpers.isBanned, async (req, res, 
     res.send(template)
   }
 }, logRouter)
+
+app.get('/admin', redisHelpers.isBanned, (req: express.Request, res : express.Response) => {
+  redisHelpers.banIp(req.ip)
+  res.status(404).send(';)')
+})
 
 app.get('/', redisHelpers.isBanned, (req: express.Request, res: express.Response) => {
   res.send('Welcome To the Backend Service for Ourlife. Made by Alexander Benko')
