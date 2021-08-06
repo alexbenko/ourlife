@@ -14,5 +14,6 @@ export default {
   setAsync: promisify(client.set).bind(client),
   hmsetAsync: promisify(client.hmset).bind(client),
   hmgetAsync: promisify(client.hmget).bind(client),
+  hgetAsync: promisify(client.hget).bind(client),
   keysAsync: promisify(client.keys).bind(client)
 }
