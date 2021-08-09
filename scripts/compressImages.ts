@@ -1,4 +1,4 @@
-import { fsAsync, compress } from '../src/lib'
+import { fsAsync, compress, dateStamp } from '../src/lib'
 import path from 'path'
 
 // await sharp('IMG_3861.jpeg').webp({ quality: 30 }).toFile('a.webp')
@@ -18,7 +18,7 @@ const compressImages = async () => {
       console.log(Math.floor((i / images.length) * 100), '%')
       if (images[i] === '.DS_Store') continue
       const oldImagePath = path.join(rootDir, images[i])
-      const newImagePath = path.join(outDirAlbum, `${dir}-${i}.webp`)
+      const newImagePath = path.join(outDirAlbum, `${dateStamp(new Date())}-${images[i].split('.')[0]}.webp`)
       await compress(oldImagePath, newImagePath)
     }
   }
