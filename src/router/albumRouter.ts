@@ -15,7 +15,6 @@ router.get('/:albumId', async (req, res) => {
     // i want an array with 4 sub arrays of similar length
     const formatted = []
     for (let i = 4; i > 0; i--) {
-      console.log(i)
       formatted.push(imageData.splice(0, Math.ceil(imageData.length / i)))
     }
     return formatted
