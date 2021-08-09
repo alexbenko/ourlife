@@ -1,21 +1,23 @@
 {{! expected props to receive }}
 {{#expect startTime, serverUrl, endpoints }}
+<h2 style="background-color: blue;color:antiquewhite;text-align:center">
+  Server Started On : {{ startTime }}
+</h2>
 <div
   style=
-  "padding: 5rem 0;
+  "padding: 3rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;"
   >
-    <h2>Server Started On : {{ startTime }}</h2>
     <ul>
       <p>Admin Routes</p>
       {{#each endpoints as endpoint}}
         <li>
           <a href="{{ serverUrl + endpoint }}" target="_blank" rel="noopener noreferrer">
-            {{ serverUrl + endpoint }}
+            {{ endpoint }}
           </a>
         </li>
       {{/each}}
