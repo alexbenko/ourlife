@@ -18,7 +18,7 @@ export default async function authenticateToken (req, res : Response, next : Nex
   jwt.verify(token, tokenSecret as string, (err: any, user: any) => {
     log.error(err)
 
-    if (err) return res.sendStatus(403)
+    if (err) return res.sendStatus(403).send('Invalid Token. Please Login Again')
 
     req.user = user
 
