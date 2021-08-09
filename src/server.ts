@@ -13,7 +13,7 @@ import { backupLogs } from './jobs'
 import db from './postgresql/db'
 import seed from './postgresql/seed'
 import render from './emails/render'
-import checkToken from './middleware/checkToken'
+import { checkToken } from './middleware'
 
 // routers
 import albumRouter from './router/albumRouter'
@@ -36,6 +36,7 @@ app.use(express.urlencoded({
 
 app.use(cors())
 app.use(helmet())
+app.use(redisHelpers.isBanned)
 
 if (!process.env.PORT) {
   console.log('No .env file, please create one using the enviornment variables in the README')
@@ -79,9 +80,9 @@ const staticPath = inProduction ? '/static' : '../static'
 app.use(express.static(path.join(__dirname, staticPath), { dotfiles: 'allow' }))
 
 // all routers go here
-app.use('/api/albums', redisHelpers.isBanned, albumRouter)
-app.use('/api/upload', redisHelpers.isBanned, uploadRouter)
-app.use('/api/auth', redisHelpers.isBanned, checkToken, authRouter)
+app.use('/api/albums', albumRouter)
+app.use('/api/upload', uploadRouter)
+app.use('/api/auth', checkToken, authRouter)
 
 const UNIQUE_ADMIN_ROUTE = randomString(16)
 app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, redisHelpers.isBanned, async (req, res, next) => {
@@ -128,8 +129,8 @@ app.listen(port, async () => {
       `app listening at ${urlToLog} in ${inProduction ? 'production' : 'development'} mode.`
     )
     log.info(
-      `Started Server On ${new Date()}. Admin Route : ${urlToLog}/${UNIQUE_ADMIN_ROUTE}/admin
-    `, true)
+      `Started Server On ${new Date()}. Admin Route : ${urlToLog}/${UNIQUE_ADMIN_ROUTE}/admin`
+      , true)
   } catch (err) {
     console.log(err)
     log.error(`Error connecting to Postgres: \n ${err.message}`)
