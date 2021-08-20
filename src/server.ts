@@ -7,13 +7,12 @@ import cron from 'node-cron'
 import path from 'path'
 
 // custom packages
-import { log, randomString, dateStamp } from './lib'
+import { log, randomString, dateStamp, token } from './lib'
 import redisHelpers from './redis/redisHelpers'
 import { backupLogs } from './jobs'
 import db from './postgresql/db'
 import seed from './postgresql/seed'
 import render from './emails/render'
-import { checkToken } from './middleware'
 
 // routers
 import albumRouter from './router/albumRouter'
@@ -82,7 +81,7 @@ app.use(express.static(path.join(__dirname, staticPath), { dotfiles: 'allow' }))
 // all routers go here
 app.use('/api/albums', albumRouter)
 app.use('/api/upload', uploadRouter)
-app.use('/api/auth', checkToken, authRouter)
+app.use('/api/auth', token.authenticateToken, authRouter)
 
 const UNIQUE_ADMIN_ROUTE = randomString(16)
 app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, redisHelpers.isBanned, async (req, res, next) => {
