@@ -26,8 +26,9 @@ CREATE TABLE images(
 
 CREATE TABLE users(
   userid SERIAL primary key,
-  fname VARCHAR(60) NOT NULL,
-  lname VARCHAR(60) NOT NUll,
+  fname VARCHAR(60) DEFAULT NULL,
+  lname VARCHAR(60) DEFAULT NUll,
   email VARCHAR(100) UNIQUE NOT NULL,
-  pass VARCHAR(255) NOT NULL
+  passwordhash VARCHAR(255) NOT NULL,
+  salt VARCHAR(255) NOT NULL
 );
