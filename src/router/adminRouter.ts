@@ -37,13 +37,9 @@ router.get('/sendsignup/:to', async (req : Request, res: Response) => {
     if (!to) {
       return res.status(404).send('Request Failed')
     }
-    console.log(to)
     const newToken = await token.generateToken({}, '1800s') // valid for 30 minutes
-
     const inProduction = process.env.NODE_ENV === 'production'
-    const port = inProduction ? Number(process.env.PORT) : 8080
-    const serverUrl = inProduction ? process.env.PRODUCTION_URL : `http://localhost:${port}`
-    const signupUrl = `${serverUrl}/signup/${newToken}`
+    const signupUrl = `${inProduction ? 'https://www.alexanderbenko.com/' : 'http://localhost:3000/'}/signup/${newToken}`
 
     const templatePath = path.join(__dirname, '../../views/signup.hbs')
 
