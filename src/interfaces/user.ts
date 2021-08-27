@@ -4,11 +4,3 @@ export interface UserData {
   plainTextPassword : string,
   passwordConfirmation ?: string
 }
-
-export interface ResponseObj {
-  success: boolean,
-  data ?: {},
-  error ?: string,
-  successMsg ?: string
-  token
-}
