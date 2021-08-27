@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { log } from '../lib'
+import { log, removeHtml } from '../lib'
 require('dotenv').config()
 
 const transporter = nodemailer.createTransport({
@@ -10,17 +10,20 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-const sendEmail = function (subject = 'No Subject Set', text = 'No Text Set') {
+const sendEmail = async function (subject = 'No Subject Set', text = 'No Text Set', html = '<p>None</p>', recipient = process.env.MY_EMAIL) {
+  console.log(removeHtml(text))
   const mailOptions = {
     from: 'Our Life Server',
-    to: process.env.MY_EMAIL,
+    to: recipient,
     subject: subject,
-    text: text
+    text: removeHtml(text),
+    html: html
   }
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       log.error('Error Sending Email: ' + error)
+      throw error
     } else {
       log.info('Email sent: ' + info.response)
     }
