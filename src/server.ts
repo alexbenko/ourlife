@@ -26,6 +26,7 @@ const app = express()
 
 const inProduction = process.env.NODE_ENV === 'production'
 const port = inProduction ? Number(process.env.PORT) : 8080
+const serverUrl = inProduction ? process.env.PRODUCTION_URL : `http://localhost:${port}`
 
 app.use(express.json())
 app.use(express.urlencoded({
@@ -82,13 +83,13 @@ app.use('/api/albums', albumRouter)
 app.use('/api/auth', authRouter)
 
 const UNIQUE_ADMIN_ROUTE = randomString(16)
-app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, redisHelpers.isBanned, async (req, res, next) => {
+app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, async (req, res, next) => {
   // if request is more than /randomstring/admin pass request to the router
   // otherwise render the admin page
   if (req.originalUrl.split('/').length > 3) {
     next()
   } else {
-    const adminUrl = `${process.env.PRODUCTION_URL}/${UNIQUE_ADMIN_ROUTE}/admin`
+    const adminUrl = `${serverUrl}/${UNIQUE_ADMIN_ROUTE}/admin`
     const templateParams = {
       startTime: dateStamp(new Date()),
       serverUrl: adminUrl,
@@ -121,12 +122,11 @@ app.listen(port, async () => {
       await seed()
     }
     console.log('Connected to database successfully!')
-    const urlToLog = inProduction ? process.env.PRODUCTION_URL : `http://localhost:${port}`
     console.log(
-      `app listening at ${urlToLog} in ${inProduction ? 'production' : 'development'} mode.`
+      `app listening at ${serverUrl} in ${inProduction ? 'production' : 'development'} mode.`
     )
     log.info(
-      `Started Server On ${new Date()}. Admin Route : ${urlToLog}/${UNIQUE_ADMIN_ROUTE}/admin`
+      `Started Server On ${new Date()}. Admin Route : ${serverUrl}/${UNIQUE_ADMIN_ROUTE}/admin`
       , true)
   } catch (err) {
     console.log(err)
