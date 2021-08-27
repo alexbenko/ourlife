@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-const sendEmail = async function (subject = 'No Subject Set', text = 'No Text Set', html = '<p>None</p>', recipient = process.env.MY_EMAIL) {
+const sendEmail = async function (subject = 'No Subject Set', text = 'No Text Set', html = `<div>${text}</div>`, recipient = process.env.MY_EMAIL) {
   console.log(removeHtml(text))
   const mailOptions = {
     from: 'Our Life Server',
