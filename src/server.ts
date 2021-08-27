@@ -7,7 +7,7 @@ import cron from 'node-cron'
 import path from 'path'
 
 // custom packages
-import { log, randomString, dateStamp, token } from './lib'
+import { log, randomString, dateStamp } from './lib'
 import redisHelpers from './redis/redisHelpers'
 import { backupLogs } from './jobs'
 import db from './postgresql/db'
@@ -17,7 +17,6 @@ import render from './emails/render'
 // routers
 import albumRouter from './router/albumRouter'
 import logRouter from './router/adminRouter'
-import uploadRouter from './router/uploadRouter'
 import authRouter from './router/authRouter'
 
 const rfs = require('rotating-file-stream')
@@ -80,8 +79,7 @@ app.use(express.static(path.join(__dirname, staticPath), { dotfiles: 'allow' }))
 
 // all routers go here
 app.use('/api/albums', albumRouter)
-app.use('/api/upload', uploadRouter)
-app.use('/api/auth', token.authenticateToken, authRouter)
+app.use('/api/auth', authRouter)
 
 const UNIQUE_ADMIN_ROUTE = randomString(16)
 app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, redisHelpers.isBanned, async (req, res, next) => {
