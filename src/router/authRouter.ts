@@ -2,16 +2,32 @@ import { Router, Request, Response } from 'express'
 import multer from 'multer'
 import path from 'path'
 
-import { ResponseObj } from '../interfaces/user'
 import { log, isEmptyString, token, compress } from '../lib'
 import db from '../postgresql/db'
 import User from '../classes/User'
+import { ResponseObj } from '../interfaces/response'
 
 const router = Router()
 // child route of /api/auth
 
+// only endpoints without token authentication middleware since it will be stored in request
+router.post('/verifytoken/:userToken', (req : Request, res: Response) => {
+  const { userToken } = req.params
+  console.log(userToken)
+  const validToken = token.authenticateToken(userToken)
+  const responseObj = <ResponseObj>{}
+  if (validToken) {
+    responseObj.success = true
+    res.status(200).send(responseObj)
+  } else {
+    responseObj.success = false
+    responseObj.error = 'Invalid Token, Please Request a New Email'
+    res.status(401).send(responseObj)
+  }
+})
+
 router.post('/signup/:token', async (req : Request, res: Response) => {
-  let responseObj : ResponseObj
+  const responseObj = <ResponseObj>{}
   try {
     const body = { ...req.body }
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
@@ -67,7 +83,7 @@ router.post('/login', token.authenticateTokenMiddleware, async (req, res) => {
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage })
-
+// CHECK TODO!!!!!!
 router.post('/single/:albumId', token.authenticateTokenMiddleware, upload.single('file'), async (req : Request, res: Response) => {
   try {
     const { albumId } = req.params
