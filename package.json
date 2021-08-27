@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexbenko/laughing-winner.git"
+    "url": "git+https://github.com/alexbenko/ourlife-fe.git"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/alexbenko/laughing-winner/issues"
   },
-  "homepage": "https://github.com/alexbenko/laughing-winner#readme",
+  "homepage": "https://github.com/alexbenko/ourlife-fe#readme",
   "dependencies": {
     "aws-sdk": "^2.881.0",
     "cors": "^2.8.5",
@@ -51,6 +51,7 @@
     "@types/morgan": "^1.9.2",
     "@types/multer": "^1.4.7",
     "@types/node": "^14.14.37",
+    "@types/nodemailer": "^6.4.4",
     "@types/pg": "^8.6.0",
     "@types/redis": "^2.8.28",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
