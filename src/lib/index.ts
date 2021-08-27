@@ -5,6 +5,7 @@ import compress from './compress'
 import dateStamp from './dateStamp'
 import token from './token'
 import isEmptyString from './isEmptyString'
+import removeHtml from './removeHtml'
 
 // I do my best to follow the DRY method while coding, these are resuable functions that I use through this project
 export {
@@ -14,5 +15,6 @@ export {
   compress,
   dateStamp,
   token,
-  isEmptyString
+  isEmptyString,
+  removeHtml
 }
