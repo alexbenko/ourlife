@@ -8,6 +8,8 @@ require('dotenv').config()
 // each time the server is started, this router is assigned a random string for the root path
 const router = Router()
 
+router.get('/status', (req, res) => res.status(200).send('Server Is Up :)'))
+
 router.get('/errors/today', async (req : Request, res: Response) => {
   try {
     const errorLogToday = path.join(__dirname, `../logs/errors/${dateStamp(new Date())}.log`)
@@ -39,7 +41,7 @@ router.get('/sendsignup/:to', async (req : Request, res: Response) => {
     }
     const newToken = await token.generateToken({}, '1800s') // valid for 30 minutes
     const inProduction = process.env.NODE_ENV === 'production'
-    const signupUrl = `${inProduction ? 'https://www.alexanderbenko.com/' : 'http://localhost:3000/'}/signup/${newToken}`
+    const signupUrl = `${inProduction ? 'https://www.alexanderbenko.com' : 'http://localhost:3000'}/signup/${newToken}`
 
     const templatePath = path.join(__dirname, '../../views/signup.hbs')
 
