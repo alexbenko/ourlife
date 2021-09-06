@@ -35,7 +35,6 @@ app.use(express.urlencoded({
 
 app.use(cors())
 app.use(helmet())
-app.use(redisHelpers.isBanned)
 
 if (!process.env.PORT) {
   console.log('No .env file, please create one using the enviornment variables in the README')
@@ -80,7 +79,7 @@ app.use(express.static(path.join(__dirname, staticPath), { dotfiles: 'allow' }))
 
 // all routers go here
 app.use('/api/albums', albumRouter)
-app.use('/api/auth', authRouter)
+app.use('/api/auth', redisHelpers.isBanned, authRouter)
 
 const UNIQUE_ADMIN_ROUTE = randomString(16)
 app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, async (req, res, next) => {
