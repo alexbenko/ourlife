@@ -44,6 +44,7 @@ The server is currently live at : https://api.alexanderbenko.com
       <li>Containers start in proper order, ie the server will be started after the database is set up and nginx is only started after the server starts.</li>
     </ul>
   </li>
+  <li> Full User autentication and JSON Web Token Based Sessions. </li>
   <li>Custom production logging that saves anything logged to its own file.</li>
   <li>Cronjob that uploads all my log files to S3 and then deletes them</li>
   <li>Cronjob that exports a backup of the Postgres database, uploads it to S3, and then deletes the backup file.</li>
