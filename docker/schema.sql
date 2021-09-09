@@ -6,6 +6,7 @@ CREATE TABLE albums(
   id SERIAL primary key,
   dirname VARCHAR(255) NOT NULL,
   displayname VARCHAR(255) NOT NULL,
+  thumbnail VARCHAR(255) DEFAULT NULL,
   albumdesc VARCHAR(560) DEFAULT NULL,
   createdat TIMESTAMP DEFAULT now(),
   updatedat TIMESTAMP DEFAULT now()
@@ -32,3 +33,6 @@ CREATE TABLE users(
   passwordhash VARCHAR(255) NOT NULL,
   salt VARCHAR(255) NOT NULL
 );
+
+CREATE INDEX index_album_id ON albums(id);
+CREATE INDEX index_image_album_id ON images(albumid);
