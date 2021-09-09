@@ -1,14 +1,11 @@
-import db from './db'
-import fs from 'fs'
+import { readdir } from 'fs/promises'
 import path from 'path'
-import { promisify } from 'util'
+import sharp from 'sharp'
+
+import db from './db'
 
 require('dotenv').config()
 // TODO: move the promisifed fs to its own module since i use it in a few other files
-const fsAsync = {
-  readdir: promisify(fs.readdir),
-  readFile: promisify(fs.readFile)
-}
 const capitalizeWord = (word) => {
   const text = word.split('')
   text[0] = text[0].toUpperCase()
@@ -27,14 +24,17 @@ const formatAlbumName = (text:string) => {
   return formatted
 }
 
+/**
+ * Seeds the database. Function is only ran on server startup if the db is empty
+ */
 const saveFilePaths = async () => {
   const staticFilePath = process.env.NODE_ENV === 'production' ? '../static/photos' : '../../static/photos'
   const photoFolderPath = path.join(__dirname, staticFilePath)
-  const albums = await fsAsync.readdir(photoFolderPath)
+  const albums = await readdir(photoFolderPath)
 
-  // eslint-disable-next-line array-callback-return
-  const result = await Promise.all(albums.map(async (album) => {
-    if (album.includes('.')) return false // these are directories and should not include any files
+  const thumbnails : { albumId : Number, path : string }[] = []
+  for (const album of albums) {
+    if (album.includes('.')) continue // these are directories and should not include any files
 
     // const albumName = formatAlbumName(album)
     await db('INSERT INTO ALBUMS(dirName, displayName) VALUES($1, $2);', [album, formatAlbumName(album)])
@@ -42,15 +42,38 @@ const saveFilePaths = async () => {
     const { id } = albumId[0]
 
     const fullAlbumPath = `${photoFolderPath}/${album}`
-    const imagesInAlbum = await fsAsync.readdir(fullAlbumPath)
+    const imagesInAlbum = await readdir(fullAlbumPath)
     const imagePaths = imagesInAlbum.filter(img => img !== '.DS_Store').map(img => fullAlbumPath + '/' + img)
-
+    const possibleThumbnails: { albumId : Number, path : string }[] = []
     for (const imageUrl of imagePaths) {
+      const { width, height } = await sharp(imageUrl).metadata()
+      /* example object
+        {
+          format: 'webp',
+          width: 3024,
+          height: 4032,
+          space: 'srgb',
+          channels: 3,
+          depth: 'uchar',
+          isProgressive: false,
+          hasProfile: false,
+          hasAlpha: false
+        }
+      */
+
+      if (height > width) {
+        possibleThumbnails.push({ albumId: id, path: imageUrl.split('/photos')[1] })
+      }
       await db('INSERT INTO IMAGES(albumId, imgUrl) VALUES($1,$2);', [id, imageUrl.split('/photos')[1]])
     }
-    return true
-  }))
-  console.log(result)
+    thumbnails.push(possibleThumbnails[Math.floor(Math.random() * possibleThumbnails.length)])
+  }
+
+  for (const thumbnail of thumbnails) {
+    if (typeof thumbnail !== 'undefined') {
+      await db('UPDATE albums SET thumbnail = $1 WHERE id = $2;', [thumbnail.path, thumbnail.albumId])
+    }
+  }
   console.log('Successfully Saved All Image File Paths')
 }
 
