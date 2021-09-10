@@ -1,7 +1,11 @@
+CREATE DATABASE photobooth;
+GRANT ALL PRIVILEGES ON DATABASE photobooth TO postgres;
+
 DROP TABLE IF EXISTS albums CASCADE;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS users;
 
+\c photobooth postgres;
 CREATE TABLE albums(
   id SERIAL primary key,
   dirname VARCHAR(255) NOT NULL,
