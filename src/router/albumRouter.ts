@@ -55,7 +55,7 @@ router.get('/fe/index', async (req, res) => {
   try {
     // WARNING : random() is really slow on bigger datasets (in the millions) but since there will only ever be a few hundred rows it works great here
     // Set up a redis cache for this endpoint so this query isn't ran every time
-    const randomAlbums = await db('SELECT thumbnail,dirname,displayname FROM albums WHERE thumbnail IS NOT NULL ORDER BY random() LIMIT 4;')
+    const randomAlbums = await db('SELECT id,thumbnail,dirname,displayname FROM albums WHERE thumbnail IS NOT NULL ORDER BY random() LIMIT 3;')
 
     responseObj.success = true
     responseObj.data = randomAlbums
