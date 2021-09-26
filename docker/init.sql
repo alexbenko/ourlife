@@ -13,7 +13,8 @@ CREATE TABLE albums(
   thumbnail VARCHAR(255) DEFAULT NULL,
   albumdesc VARCHAR(560) DEFAULT NULL,
   createdat TIMESTAMP DEFAULT now(),
-  updatedat TIMESTAMP DEFAULT now()
+  updatedat TIMESTAMP DEFAULT now(),
+  visits INTEGER DEFAULT 0
 );
 
 CREATE TABLE images(
