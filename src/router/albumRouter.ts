@@ -18,26 +18,28 @@ router.get('/:albumId', async (req, res) => {
     const formatted = []
     // i
     for (let i = 4; i > 0; i--) {
-      console.log(imageData)
-      // delete imageData[i].displayname
       formatted.push(imageData.splice(0, Math.ceil(imageData.length / i)))
     }
     return formatted
   }
+  const responseObj = <ResponseObj>{}
   try {
     const { albumId } = req.params
     const album = await db(
-      'SELECT images.imgurl, albums.displayname FROM images JOIN albums ON(images.albumid = albums.id AND images.albumid = $1)', [albumId]
+      'SELECT images.imgurl, albums.displayname, albums.visits FROM images JOIN albums ON(images.albumid = albums.id AND images.albumid = $1)', [albumId]
     )
-    console.log(album)
 
-    const response = { album: {}, displayName: album[0].displayname }
-    response.album = formatData(album)
+    responseObj.success = true
+    const displayName = album[0].displayname
+    const visits = album[0].visits
+    responseObj.data = { album: formatData(album), displayName, visits }
 
-    res.send(response)
+    res.send(responseObj)
   } catch (err) {
+    responseObj.success = false
+    responseObj.error = 'Request Failed Please Try Again Later.'
     log.error(`Error Retrieving Albumid:${req.params.albumId}: ${err}`)
-    res.status(400)
+    return res.status(400).send(responseObj)
   }
 })
 
