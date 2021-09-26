@@ -7,15 +7,7 @@ import { log } from '../lib'
 const router = express.Router()
 // child route of /api/albums
 router.get('/all', async (req, res) => {
-  const albumsInfo = await db('SELECT id,displayname FROM albums')
-  /*
-  for (const album of albumsInfo) {
-    // WARNING! random() is really slow on bigger datasets but since images will never have more than a few thousand rows it works great
-    const randomImage = await db('SELECT imgurl FROM images WHERE albumid = $1 ORDER BY RANDOM() LIMIT 1 ;', [album.id])
-    const { imgurl } = randomImage[0]
-    album.thumbnail = imgurl
-  }
-  */
+  const albumsInfo = await db('SELECT id,displayname FROM albums ORDER BY displayname ASC;')
   res.send(albumsInfo)
 })
 
