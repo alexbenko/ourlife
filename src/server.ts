@@ -18,6 +18,7 @@ import render from './emails/render'
 import albumRouter from './router/albumRouter'
 import logRouter from './router/adminRouter'
 import authRouter from './router/authRouter'
+import webhookRouter from './router/webhookRouter'
 
 const rfs = require('rotating-file-stream')
 require('dotenv').config()
@@ -80,6 +81,7 @@ app.use(express.static(path.join(__dirname, staticPath), { dotfiles: 'allow' }))
 // all routers go here
 app.use('/api/albums', albumRouter)
 app.use('/api/auth', redisHelpers.isBanned, authRouter)
+app.use('/api/webhook', redisHelpers.isBanned, webhookRouter)
 
 const UNIQUE_ADMIN_ROUTE = randomString(16)
 app.use(`/${UNIQUE_ADMIN_ROUTE}/admin`, async (req, res, next) => {
