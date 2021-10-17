@@ -34,7 +34,7 @@ async function isBanned (req: Request, res: Response, next: NextFunction) {
       // if an ip attempts againt this increments the value to keep track in case you need to know.
       client.hmsetAsync(ipHashKey, { [ip]: parsedValue })
 
-      res.status(404).send('😉')
+      res.status(400).send({ admininfo: 'https://http.cat/400' })
     } else {
       next()
     }
@@ -48,7 +48,7 @@ const redisHelpers = {
   banIp,
   isBanned,
   get,
-  set,
+  set
 }
 
 export default redisHelpers
