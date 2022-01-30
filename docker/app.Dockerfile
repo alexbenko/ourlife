@@ -1,4 +1,4 @@
-FROM node
+FROM arm64v8/node:latest
 
 COPY ./package.json .
 COPY ./package-lock.json .
