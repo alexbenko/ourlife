@@ -13,9 +13,9 @@ const router = Router()
 // only endpoints without token authentication middleware since it will be stored in request
 router.post('/verifytoken/:userToken', (req : Request, res: Response) => {
   const { userToken } = req.params
-  console.log(userToken)
   const validToken = token.authenticateToken(userToken)
   const responseObj = <ResponseObj>{}
+
   if (validToken) {
     responseObj.success = true
     res.status(200).send(responseObj)
