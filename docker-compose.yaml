@@ -9,7 +9,7 @@ services:
        - ./backups:/backups
 
   redis:
-    image: redis
+    image: redis:7.0-rc2-bullseye
     container_name: store
     ports:
       - '6379:6379'

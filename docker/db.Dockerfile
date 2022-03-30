@@ -1,2 +1,2 @@
-FROM arm64v8/postgres:10.4
+FROM postgres:14.2-bullseye
 COPY ./docker/init.sql /docker-entrypoint-initdb.d/
