@@ -32,7 +32,6 @@ I go on a lot of trips and do a lot of picture worthy things. As a result my pho
 
 Backend/DevOps is the software field I want to get into so I created this project to demonstrate my profeciency. Anyone could upload their photos to a CDN or S3 and serve their content from there. I put in the time and effort in essentially creating my own CDN.
 
-The server is currently live at : https://api.alexanderbenko.com
 <!-- MAIN FEATURES -->
 ## Main Features
 <ol>
