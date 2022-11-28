@@ -2,7 +2,8 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
-# PROJECT IS WIP
+# PROJECT IS No Longer being worked on.
+My only goal was to work on this until i got a job so development for this will probably stop.
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
